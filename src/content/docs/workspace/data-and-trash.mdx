@@ -1,0 +1,72 @@
+---
+title: "Export, Trash and deleting data"
+description: "Export any list, restore deleted records from the Trash within 30 days, and delete mailboxes, records, your account or the whole workspace."
+sidebar:
+  label: "Data and Trash"
+---
+
+import { Aside, CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
+
+Your data is yours. You can export it at any time, and anything you create in Omniscient can be deleted. Your emails and calls are never used to train AI models.
+
+## Export your data
+
+| What | Where | Formats |
+| --- | --- | --- |
+| Any list or view | **Import / Export** on the list, then **Export view as** | CSV, Excel (XLSX), JSON |
+| Rows you picked | Tick rows, then **Export to CSV** in the bar | CSV |
+| A report or chart from Otto | Ask Otto to "export to Excel" | XLSX, CSV, PNG |
+| Your account and security activity | **Settings**, then **Account**, then **Your data** | JSON |
+| The workspace's sign-in log | **Settings**, then **Sign-in**, then **Audit log** | CSV |
+
+Developers can also read records with the [REST API](/developers/api/).
+
+## The Trash
+
+Deleting a company, person, opportunity or custom record moves it to the Trash, along with everything that went with it. It stays there for 30 days, then it's erased for good.
+
+Open it from **Settings**, then **Trash**.
+
+- Use **Search Trash** to find a record. The list shows its **Name**, **Type**, who deleted it and when.
+- Click **Restore** to put a record back with everything that went with it.
+- Click **Delete forever** to erase it now.
+- Tick several rows to restore or delete them together.
+
+Anyone can restore records. Members can delete forever only what they deleted themselves. Owners and admins can delete anything.
+
+<Aside type="tip">
+Right after you delete something, a message with **Undo** shows at the bottom of the screen. You can also press <kbd>⌘</kbd> <kbd>Z</kbd>.
+</Aside>
+
+## Everything you make can be deleted
+
+Notes, chats with Otto, Knowledge documents, skills, message templates, saved views, workflows, folders, forms, webhooks and API keys each have their own delete. Omniscient asks you to confirm before it deletes.
+
+## Disconnect a mailbox
+
+Disconnecting a mailbox in **Settings**, then **Mail & calendar**, deletes the emails and meetings it brought in. The companies, people and opportunities stay. See [Email](/email-and-calendar/email/#disconnect).
+
+## Delete your account
+
+See [Account and security](/workspace/account-and-security/#delete-your-account).
+
+## Delete the workspace
+
+Only the owner can delete a workspace.
+
+<Steps>
+
+1. Go to **Settings**, then **General**.
+1. Under **Danger zone**, click **Delete workspace**.
+1. Type the workspace's name and confirm.
+
+</Steps>
+
+This removes the workspace with all its records, emails, meetings and notes, and disconnects every mailbox. It can't be undone. Export what you want to keep first.
+
+## Next steps
+
+<CardGrid>
+  <LinkCard title="Views" href="/crm/views/#export-a-list" description="Export a list the way you see it." />
+  <LinkCard title="FAQ" href="/reference/faq/" description="Privacy and data questions." />
+</CardGrid>

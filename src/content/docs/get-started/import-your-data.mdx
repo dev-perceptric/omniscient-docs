@@ -1,0 +1,97 @@
+---
+title: "Import your data into Omniscient"
+description: "Move your companies, people, opportunities and notes from HubSpot, Salesforce, Attio or Pipedrive, or import a CSV file with Otto."
+sidebar:
+  label: "Import your data"
+---
+
+import { Aside, CardGrid, LinkCard, Steps, TabItem, Tabs } from '@astrojs/starlight/components';
+
+You can run Omniscient next to your current CRM, or move your records over. Imports never overwrite what someone typed. Records that already exist only get their blank fields filled.
+
+## Import from another CRM
+
+Owners and admins can bring records over from HubSpot, Salesforce, Attio or Pipedrive. The import brings accounts, contacts, leads (as people), pipelines with their stages, opportunities and notes.
+
+<Steps>
+
+1. Go to **Settings**, then **Imports**.
+1. Pick your old CRM by its logo.
+1. Click **Connect HubSpot** (or Salesforce, Attio or Pipedrive) and sign in to approve access.
+1. The import starts on its own. Each import shows in the list below with the step it is on, the counts so far and a status: **Queued**, **Running**, **Done** or **Failed**.
+
+</Steps>
+
+You can keep working while it runs. See [CRM imports](/integrations/crm-imports/) for more on each tool.
+
+<Aside type="note">
+If a tool asks for a token, its one-click sign-in isn't set up for your workspace yet. Write to [hello@tryomniscient.com](mailto:hello@tryomniscient.com) and we will help you move.
+</Aside>
+
+## Import a CSV file with Otto
+
+CSV and TSV files go through Ask Otto. Otto reads the file, matches each column to a field and shows you a plan. Nothing is written until you click **Import**.
+
+<Tabs>
+  <TabItem label="From a list">
+
+<Steps>
+
+1. Open **Companies**, **People** or **Opportunities**.
+1. Click **Import / Export** in the toolbar, then **Import companies in chat** (or people, or opportunities). On an empty list, click **Import**.
+1. Pick your file. A new chat opens in Ask Otto with the file attached.
+
+</Steps>
+
+  </TabItem>
+  <TabItem label="From Ask Otto">
+
+<Steps>
+
+1. Open **Ask Otto**.
+1. Attach the file with **Add files and more**, or drop it on the box.
+1. Ask for an import in plain words, like "import these contacts".
+
+</Steps>
+
+  </TabItem>
+</Tabs>
+
+Files can be up to 4 MB, 5,000 rows and 150 columns.
+
+### Check the plan
+
+The plan card shows:
+
+- How many companies, people and opportunities are new, and how many are already in Omniscient.
+- Each column with the field it goes to. Change any of them, or pick **Skip**.
+- How many cells are filled in each column, and how many can't be read.
+- For choice fields, which values match, which are close ("Health Care" to "Healthcare") and which become new choices.
+- Your file's stages next to your pipeline's stages. Guesses are marked **Check**.
+- **Create companies that aren't in Omniscient yet**, which you can turn off.
+- **Worth a look**: pairs that may be the same company, like one name with two websites.
+
+Click **Import**. When it finishes, the card shows what was created, what was filled in and anything that couldn't be imported, with the reason.
+
+### Undo an import
+
+Click **Undo import** on the card. Omniscient removes the records the import made. Records that were already there stay, along with the blank fields the import filled.
+
+## How duplicates are handled
+
+| Record | Matched by |
+| --- | --- |
+| Company | Website first, then name when one side has no website |
+| Person | Email, or name at the same company |
+| Opportunity | Name at the same company |
+
+The same record twice in one file becomes one record, filled from both rows. A personal address like gmail.com never becomes a company's website. Running the same import again finds the records it made, so nothing is made twice.
+
+Numbers with currency signs or "12.5k" are read as numbers. Dates in common US, European, ISO and Excel forms work. A cell that can't be read stays blank. Otto never guesses a value.
+
+## Next steps
+
+<CardGrid>
+  <LinkCard title="Invite your team" href="/get-started/invite-your-team/" description="Bring teammates into the workspace." />
+  <LinkCard title="Data model" href="/crm/data-model/" description="Add the fields your import needs." />
+</CardGrid>

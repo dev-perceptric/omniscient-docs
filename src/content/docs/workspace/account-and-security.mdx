@@ -1,0 +1,96 @@
+---
+title: "Your account, security and preferences"
+description: "Change your profile and email, set a password, turn on two-step verification, add passkeys, manage devices, and choose your notifications and appearance."
+sidebar:
+  label: "Account and security"
+---
+
+import { Aside, CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
+
+Your own settings live under **You** in **Settings**: **Account**, **Security**, **Notifications** and **Experience**. They apply to you in every workspace you belong to, unless noted.
+
+## Account
+
+### Profile
+
+Change **Your name**, **Upload a picture** or **Remove picture**. Your name and picture show to your team.
+
+### Email
+
+Click **Change email** to sign in with a new address. Omniscient sends a confirmation to both your old and your new address, and the change happens once both are confirmed.
+
+### Sign-in methods
+
+Link Google, Microsoft or Apple to your account so you can sign in with any of them. You can unlink one as long as you keep another way to sign in.
+
+### Your data
+
+Under **Your data**, click **Download** next to **Account file (JSON)** for a copy of your account and your security activity.
+
+### Delete your account
+
+Under **Delete account**, click the delete button, type your email and click **Delete my account**. This removes your account and any workspace where you are the only member, and your mailboxes stop syncing everywhere. Work you did in shared workspaces stays with your team.
+
+Two things can stop a delete. If you own a workspace with other people in it, someone else has to become its owner first. If a workspace only you are in has a paid plan, cancel the plan in **Plans & billing** first.
+
+## Security
+
+### Password
+
+Click **Set a password** to sign in with your email and a password, or **Change** to pick a new one. **Remove password** takes it away, so you sign in with a code or another method instead.
+
+### Two-step verification
+
+Two-step verification asks for a second check after your password or email code.
+
+<Steps>
+
+1. Under **Two-step verification**, click **Set up** next to **Authenticator app**.
+1. Scan the QR code with your authenticator app, or type the key.
+1. Type the **Code from your app** to confirm.
+1. Save **Your backup codes**. Each works once, and they won't show again. Click **Copy codes** or **Download codes**.
+
+</Steps>
+
+Your workspace may also offer **Text message** codes. Click **Make new codes** under **Backup codes** if you run out or lose them. Click **Turn off** to stop using a method.
+
+### Passkeys
+
+A passkey lets you sign in with your fingerprint, face or screen lock. Click **Add passkey** and follow your browser's steps. **Rename** or **Delete** a passkey from the list.
+
+### Devices
+
+**Devices** lists every browser where you're signed in, marked **This device** for the one you're using. Click **Sign out** next to any of them, or **Sign out others** to end every session but this one.
+
+### Recent activity
+
+**Recent activity** shows your sign-ins and security changes for the last 90 days.
+
+<Aside type="caution">
+Omniscient emails you when someone signs in on a new device, or when your password, email or two-step settings change. If it wasn't you, click **This wasn't me** in the email. It signs you out everywhere and starts a password reset.
+</Aside>
+
+## Notifications
+
+Under **Digests**:
+
+- **Email me my digest**: a short email each weekday morning with today's meetings, emails to answer and opportunities that need attention. It skips days with nothing to report.
+- **Getting-started tips**: the short emails new workspaces get in their first weeks.
+- **Team digest in Slack**: one post for the whole team. Admins connect it. See [Slack](/integrations/slack/).
+
+An opportunity needs attention when its close date has passed, or when there has been no email or meeting with its company for 14 days.
+
+## Experience
+
+| Section | Options |
+| --- | --- |
+| Appearance | **Light**, **Dark** or **System** |
+| Date and time | **Date format**, **Time format** and **First day of the week** (Monday, Sunday or Saturday) |
+| Numbers | **Number format** for numbers and amounts |
+
+## Next steps
+
+<CardGrid>
+  <LinkCard title="Sign-in rules and SSO" href="/workspace/sign-in-rules-and-sso/" description="Workspace-wide sign-in rules for admins." />
+  <LinkCard title="Data and Trash" href="/workspace/data-and-trash/" description="Export, restore and delete." />
+</CardGrid>

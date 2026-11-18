@@ -1,0 +1,123 @@
+---
+title: "Use the Chrome extension"
+description: "Save LinkedIn profiles, companies and up to 10 people at a time, see records beside LinkedIn and Gmail, and add your team's templates to messages you send."
+sidebar:
+  label: "Use the extension"
+---
+
+import { Aside, CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
+
+Open the side panel from the Omniscient icon in your toolbar. It reads the page you have open and shows what you can do with it. Everything happens on your click.
+
+## Save a person from LinkedIn
+
+<Steps>
+
+1. Open the person's LinkedIn profile, or a lead page in Sales Navigator.
+1. Open the side panel. It shows the person as read from the page.
+1. Pick a **Lifecycle** and add a **Note** if you like.
+1. Click **Save to Omniscient**.
+
+</Steps>
+
+The person is saved with their name, photo, title, company, location and LinkedIn link, plus when they started their current role, past companies and school when the page shows them. Your note lands on their timeline as a note from you.
+
+If the person's company isn't in Omniscient yet, open the company's LinkedIn page and click **Save company**. The extension reads the company's website from the page and links everyone you saved from that company.
+
+## Save several people at once
+
+The extension can save up to 10 people a click from:
+
+- LinkedIn search results and Sales Navigator lists.
+- A company's **People** tab.
+- A post's comments, or its list of reactions.
+- **People also viewed** on a profile.
+
+<Steps>
+
+1. Open one of those pages and wait for the people to load.
+1. Open the side panel. **Pick people to save** lists the people on screen, all ticked. People already saved show as **In Omniscient**.
+1. Untick anyone you don't want, and add a tag in **Tag this batch (optional)**, like "Webinar November".
+1. Click **Save these 10** (or however many you picked).
+
+</Steps>
+
+After saving, the panel offers **Find emails** for the people you just saved and **Add to workflow** to start a sequence.
+
+<Aside type="note">
+The extension never scrolls or pages for you. If fewer people show than you expect, scroll the page to load more, then press Refresh. For the next page of results, go to it on LinkedIn, and the panel follows.
+</Aside>
+
+## See the record beside LinkedIn
+
+When the person on the page is already in Omniscient, the panel shows their record with **Details**, **Activity** and **Notes** tabs:
+
+- Their fields, which you can edit in place.
+- Their company and open opportunities, with stage, amount, close date, next step and owner.
+- Their recent emails and meetings.
+- Notes, where you can **Add note** or edit your own.
+
+Buttons at the top let you **Open in Omniscient**, **Find email**, **Add to workflow** or start a **New opportunity**.
+
+### Changed on LinkedIn
+
+When the title or company on LinkedIn differs from the record, the panel shows both under **Changed on LinkedIn**. Click **Update from LinkedIn** to change the record. Nothing changes until you click.
+
+## Gmail and Outlook
+
+In Gmail and Outlook on the web, open the side panel on an email. **People in this email** shows each sender and recipient, with their record when they are in Omniscient and **Save** when they are new.
+
+## Save a company from its website
+
+On any company's own website, the panel shows the company, whether it's in Omniscient and its people and opportunities. Click **Save company** to add it.
+
+## Add your team's templates to a message
+
+Your team's message templates show wherever you write to someone: LinkedIn messages, connection notes, InMail, Gmail and Outlook on the web.
+
+<Steps>
+
+1. Click into the message box and click **Templates**.
+1. Use **Search templates** to find one. The ones your team uses most show first.
+1. Pick a template. It goes into the box with fields like `{{first_name}}` filled in from the record.
+1. Read it, change it if you like and send it yourself.
+
+</Steps>
+
+A field with no value stays as `{{company}}`, so you can spot it before you send. After you send a LinkedIn message, click **Log it** to save it on the person's timeline.
+
+### Write templates
+
+Templates are written by your team in **Settings**, then **Templates**. Click **Manage templates** in the extension to get there.
+
+<Steps>
+
+1. Click **New template**. On an empty page, the button sits under **Add your first template**.
+1. Give it a **Name** and pick a **Channel**: **Any**, **LinkedIn** or **Email**.
+1. For email, add a **Subject**.
+1. Write the **Message**. Click a variable to add it.
+
+</Steps>
+
+| Variable | Fills in |
+| --- | --- |
+| `{{first_name}}` | First name |
+| `{{last_name}}` | Last name |
+| `{{full_name}}` | Full name |
+| `{{company}}` | Their company |
+| `{{title}}` | Their title |
+| `{{my_first_name}}` | Your first name |
+| `{{my_company}}` | Your company |
+
+Click **Edit** or **Delete** next to a template to change or remove it. Otto never writes or suggests templates. They are always your team's own words.
+
+<Aside type="caution">
+The extension never sends a LinkedIn message, connection request, InMail or email for you. It only puts text in the box. You press Send.
+</Aside>
+
+## Next steps
+
+<CardGrid>
+  <LinkCard title="Workflows" href="/otto/workflows/" description="Follow up by email with the people you saved." />
+  <LinkCard title="Companies and people" href="/crm/companies-and-people/" description="Where saved people land." />
+</CardGrid>

@@ -1,0 +1,85 @@
+---
+title: "Sign-in rules, single sign-on and SCIM"
+description: "Owners and admins can require two-step verification, choose how people sign in, set session length, connect SAML single sign-on, provision members with SCIM and download the audit log."
+sidebar:
+  label: "Sign-in rules and SSO"
+---
+
+import { Aside, CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
+
+Workspace-wide sign-in rules live in **Settings**, then **Sign-in**. Only owners and admins see this page. The rules apply to everyone in the workspace.
+
+## Require two-step verification
+
+Under **Two-step verification**, turn on **Require for everyone**. People who don't use two-step yet set it up the next time they sign in. See [Account and security](/workspace/account-and-security/#two-step-verification).
+
+## Choose ways to sign in
+
+Under **Ways to sign in**, pick what your workspace accepts: Google, Microsoft, Apple, **Email code**, **Password**, **Passkey** and **Company SSO**. A method that isn't ready for your workspace shows **Not set up**.
+
+## Set session length
+
+Under **Session length**, choose how long people stay signed in before they sign in again: **No limit**, **8 hours**, **1 day**, **7 days** or **30 days**.
+
+## Connect single sign-on
+
+You can connect Okta, Microsoft Entra ID, Google Workspace or any SAML app. First you prove you own your domain, then you connect your identity provider.
+
+### Verify your domain
+
+<Steps>
+
+1. Under **Domains and single sign-on**, click **Add domain** and type your company's domain, like `acme.com`.
+1. Copy the **TXT name** and **TXT value** with **Copy name** and **Copy value**.
+1. Add a TXT record with that name and value at your domain's DNS provider.
+1. Back in Omniscient, click **Verify**. The domain shows **Verified** once the record is found.
+
+</Steps>
+
+DNS changes can take a while to show up. If **Verify** doesn't work right away, try again later.
+
+### Set up SSO
+
+<Steps>
+
+1. Next to your verified domain, click **Set up SSO**.
+1. In your identity provider, add Omniscient as a SAML app. Copy the **Entity ID**, **ACS URL** and **Metadata URL** from the window into it.
+1. Copy the **Metadata URL from your identity provider** and paste it into Omniscient.
+1. Click **Connect**. The domain now shows an **SSO** tag.
+
+</Steps>
+
+To make everyone at that domain use SSO, turn on **Only single sign-on** for the domain. To stop using SSO, click **Turn off SSO**.
+
+<Aside type="tip">
+A verified domain also makes joining by domain safer. Once you verify a domain, people who sign up with that domain are offered only your workspace.
+</Aside>
+
+## Provision members with SCIM
+
+With SCIM, Okta and Entra add and remove members for you.
+
+<Steps>
+
+1. Under **Provisioning (SCIM)**, click **Make key**. The key shows once, so copy it right away.
+1. Copy the **Base URL** with **Copy URL**.
+1. In Okta or Entra, set up SCIM provisioning with the base URL and the key.
+
+</Steps>
+
+Click **Revoke** next to a key to stop it.
+
+## Invite links
+
+Make a link anyone can use to join, with a role and an end date. See [Invite your team](/get-started/invite-your-team/#share-an-invite-link).
+
+## Audit log
+
+The **Audit log** shows members' sign-ins and security changes. Click **Download CSV** for the full log with the time, person, event, method, device and country.
+
+## Next steps
+
+<CardGrid>
+  <LinkCard title="Members and roles" href="/workspace/members-and-roles/" description="Who can do what in the workspace." />
+  <LinkCard title="Account and security" href="/workspace/account-and-security/" description="Your own password, two-step and passkeys." />
+</CardGrid>

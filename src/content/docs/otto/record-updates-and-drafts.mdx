@@ -1,0 +1,69 @@
+---
+title: "Record updates and email drafts"
+description: "How Otto suggests field changes with the quote behind each one, and how he drafts follow-up emails that you edit and send yourself."
+sidebar:
+  label: "Record updates and drafts"
+---
+
+import { Aside, CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
+
+Otto keeps your CRM current and helps you follow up. He reads your calls and emails, then suggests what to change and what to write. You stay in charge: every change waits for your click, and every email goes out only when you send it.
+
+## Record updates
+
+After a call or an email, Otto may find something that belongs on a record, like a new stage or a next step. He shows it as a suggestion with the exact quote it came from.
+
+For example: Set **Stage** to **Proposal**, from "Send us the proposal and we'll take it from there."
+
+### Where suggestions show
+
+- **On the meeting page.** Under **Record updates to review**, each suggestion has **Accept** and **Skip**.
+- **On the record.** A suggestion shows next to the field it would change.
+- **In Ask Otto.** When you ask Otto to update a record, he shows an **Update** card with **Confirm**.
+
+Accepting a suggestion sets the field. Skipping it leaves the field as it was. Either way, the field history shows who made the change.
+
+### Rules Otto follows
+
+- Values a person typed are never changed without a click.
+- Every suggestion carries its quote, so you can check it.
+- Otto sees only the mail you are allowed to see.
+
+### Let Otto fill fields on his own
+
+For fields where you trust Otto, an admin can set the field to **Fill when empty** in the [data model](/crm/data-model/#let-otto-fill-a-field). Otto then fills the field when it's blank and leaves typed values alone. **Suggest** keeps every change waiting for review.
+
+## Email drafts
+
+Otto writes drafts in your voice, from everything on the record. He never sends them.
+
+<Steps>
+
+1. Open **Ask Otto**, or the Otto box on a record.
+1. Ask for what you need, like "draft a follow-up to Maya about the pricing she asked for". You can also type <kbd>/</kbd> and pick **Draft an email**.
+1. Otto shows an **Email draft** card with the recipient, the subject and the text.
+1. Click **Open in Gmail** to open it in a new Gmail message, or copy the text to paste into any mail app.
+1. Edit it and send it yourself.
+
+</Steps>
+
+If Otto needs something he can't know, like a price or a file, he leaves a short note in [brackets] for you to fill in before you send.
+
+### Wrap up a call in one pass
+
+After a meeting, ask Otto to "wrap up my call with Northwind" or type <kbd>/</kbd> and pick **Wrap up a call**. Otto gives you a short recap and a set of cards: opportunity changes, a note for the record and a follow-up email draft. Confirm the ones you want.
+
+<Aside type="tip">
+Add your pricing and how you like to sound to [Knowledge](/otto/skills-and-knowledge/#knowledge). Otto uses it in every draft.
+</Aside>
+
+## Emails in workflows
+
+Workflows can send emails for you, from your own mailbox. Each email step is written by a person. Otto can draft or rewrite a step when you click **Draft** or **Rewrite**, and the email still needs someone to click **Approve** before the workflow can go live. See [Workflows](/otto/workflows/).
+
+## Next steps
+
+<CardGrid>
+  <LinkCard title="Meetings and call notes" href="/email-and-calendar/meetings-and-call-notes/" description="Where Otto's call notes come from." />
+  <LinkCard title="Workflows" href="/otto/workflows/" description="Follow-ups that run on their own." />
+</CardGrid>

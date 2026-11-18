@@ -1,0 +1,113 @@
+---
+title: "Connect Gmail, Outlook or any other email"
+description: "Connect your Google, Microsoft 365 or IMAP mailbox so Omniscient can build your companies, people and opportunities from your email and calendar."
+sidebar:
+  label: "Connect your inbox"
+---
+
+import { Aside, CardGrid, LinkCard, Steps, TabItem, Tabs } from '@astrojs/starlight/components';
+
+Your inbox is where Omniscient gets its records. Each person on the team connects their own mailbox. You can connect more than one, and you can disconnect any of them at any time.
+
+## Connect a mailbox
+
+You can connect during setup, or later from **Settings**, then **Mail & calendar**.
+
+<Tabs>
+  <TabItem label="Google">
+
+<Steps>
+
+1. In **Settings**, then **Mail & calendar**, click **Connect email**.
+1. Type your email address and click **Continue**. Omniscient sees that it is a Google account.
+1. Click **Continue with Google**, pick your account and approve access.
+1. You come back to Omniscient and the first sync starts.
+
+</Steps>
+
+Gmail and Google Calendar connect together. See [Google](/integrations/google/) for what Omniscient reads.
+
+  </TabItem>
+  <TabItem label="Microsoft 365">
+
+<Steps>
+
+1. In **Settings**, then **Mail & calendar**, click **Connect email**.
+1. Type your email address and click **Continue**.
+1. Click **Continue with Microsoft**, sign in and approve access.
+1. You come back to Omniscient and the first sync starts.
+
+</Steps>
+
+Outlook mail and calendar connect together. See [Microsoft](/integrations/microsoft/).
+
+  </TabItem>
+  <TabItem label="Other email">
+
+Use this for mail hosted somewhere else, such as Zoho, Fastmail, iCloud, Yahoo, AOL, GoDaddy, Titan or Hostinger.
+
+<Steps>
+
+1. In **Settings**, then **Mail & calendar**, click **Connect email**.
+1. Type your email address and click **Continue**. Omniscient looks up your mail server for you.
+1. If the server it found is wrong, click **Not right? Pick another** and choose **Other mail**.
+1. Type your **Password or app password** and click **Connect**.
+
+</Steps>
+
+Many providers need an app password when two-step sign-in is on. Make one in your mail provider's security settings. Open **Advanced** to set the username, the IMAP and SMTP servers, or the ports by hand.
+
+  </TabItem>
+</Tabs>
+
+## What happens next
+
+Your mailbox shows in **Mail & calendar** with its status:
+
+| Status | What it means |
+| --- | --- |
+| Waiting for first sync | Connected. The first sync has not started yet. |
+| Syncing | Omniscient is reading your mail and calendar. |
+| Synced | Up to date. New mail comes in every few minutes. |
+| Sync failed | Something went wrong. The line under the mailbox says what. |
+| Connect again | Access ran out or was taken back. Click **Reconnect**. |
+
+Click **Sync now** at the top of the section to check for new mail right away.
+
+## Choose what syncs
+
+Under **Sync settings** on the same page, you decide who and what gets added. Click **Save** when you are done.
+
+- **Contacts and accounts**: add people only **When you reach out**, or **Anyone who emails you**.
+- **Add people with personal addresses (gmail.com, outlook.com)**: on or off.
+- **Add shared inboxes (info@, sales@, support@)**: off unless you turn it on.
+- **Calendar**: **External meetings only** or **All meetings**.
+- **How far back**: from **1 week** to **1 year** of past mail and calendar on the first sync.
+- **Do not track**: emails or domains that never sync, like `lawyer@firm.com` or `family.com`.
+
+<Aside type="tip">
+The setup flow suggests a careful start: only people you reach out to, no personal addresses and one month back. You can widen it any time.
+</Aside>
+
+## Choose what your team sees
+
+Each mailbox has its own sharing rule, in the menu under it:
+
+| Option | Teammates see |
+| --- | --- |
+| Share everything | The subject, the preview and what Otto learned |
+| Share who and when | Only that a conversation happened, and when |
+| Keep private | Nothing from this mailbox |
+
+Read more in [Email](/email-and-calendar/email/).
+
+## Disconnect a mailbox
+
+Click the disconnect icon next to the mailbox and confirm. Omniscient stops syncing it and deletes the emails and meetings it brought in. Your contacts, companies and opportunities stay. Admins can also disconnect a teammate's mailbox under **Teammates' inboxes**.
+
+## Next steps
+
+<CardGrid>
+  <LinkCard title="Import your data" href="/get-started/import-your-data/" description="Bring your old CRM or a spreadsheet." />
+  <LinkCard title="Meetings and call notes" href="/email-and-calendar/meetings-and-call-notes/" description="Turn on notes from Google Meet, Teams and Zoom." />
+</CardGrid>

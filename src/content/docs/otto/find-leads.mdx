@@ -1,0 +1,72 @@
+---
+title: "Find leads with Otto"
+description: "Describe the people or companies you want to reach in one sentence, and Otto builds a ranked lead list you can save to your CRM."
+sidebar:
+  label: "Find leads"
+---
+
+import { Aside, CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
+
+Describe the buyers you want in plain words, and Otto turns it into a lead list. Otto searches a B2B database of people and companies, mostly in the United States, and ranks each lead by how well it fits. Nothing goes into your CRM until you click **Save**.
+
+## Build a lead list
+
+<Steps>
+
+1. Open **Ask Otto**.
+1. Type <kbd>/</kbd> and pick **Find leads**, or just describe who you want. For example: "Heads of Growth at US fintech companies with 50 to 200 people."
+1. Otto writes his plan as one sentence, then one line with how many leads he found.
+1. Check the **Leads** card. It shows the list's name, how many leads were found, and each lead with their title and company. People already in your CRM are marked **In CRM**.
+1. Click **Save** to add the new leads to your CRM. The button shows how many it will save. Click **Dismiss** to skip the list.
+
+</Steps>
+
+Saved leads become people and companies in your CRM, ready to work like any other record.
+
+## What you can ask for
+
+| Ask for | Example |
+| --- | --- |
+| People by role | "VPs of Sales at SaaS companies in Texas" |
+| People at one company | "Who should I talk to at acme.com about security?" |
+| Companies | "Logistics companies in Ohio with 200 to 1,000 people" |
+| Lookalikes | "Companies like our three best customers" |
+| More of the same | "Same list, but in Canada" |
+
+Otto can filter by title, seniority, department, industry, company size, revenue and place. Each search returns up to 25 leads. For more, ask for the next cut, like another state or another title.
+
+## Otto keeps your list clean
+
+Before each search, Otto reads your [Knowledge](/otto/skills-and-knowledge/#knowledge) for your ideal customer, the regions you serve and your competitors. He then leaves out:
+
+- Your own company.
+- Current customers and companies in open opportunities.
+- Competitors named in Knowledge.
+- Anyone who asked not to be contacted.
+
+If your request goes against your Knowledge, like a region you don't serve, Otto says so and asks before he searches.
+
+## Tips for better lists
+
+- **Titles beat seniority.** "VP Sales" finds the right people. Seniority "VP" alone finds every VP.
+- **Use fewer filters.** Add one only when you need it.
+- **Name your list well.** Otto gives each list a short name that says who and where, so you can find it later.
+- **Give Otto your ideal customer.** A Knowledge page about who buys from you makes "find me leads" work without more detail.
+
+<Aside type="note">
+Lead results that nobody saves are removed after 30 days. Anyone who asks to be removed is taken out right away. Leads you save stay in your CRM. Otto never uses LinkedIn to find leads.
+</Aside>
+
+## After you save
+
+- Open **People** to see your new leads. Filter by when they were created to find the batch.
+- Tick the leads and click **Find emails** for anyone without one.
+- Tick them and click **Add to workflow** to start a follow-up sequence. See [Workflows](/otto/workflows/).
+- Ask Otto to **Draft an email** to one of them. You send it yourself.
+
+## Next steps
+
+<CardGrid>
+  <LinkCard title="Skills and Knowledge" href="/otto/skills-and-knowledge/" description="Write down your ideal customer for better lists." />
+  <LinkCard title="Workflows" href="/otto/workflows/" description="Follow up with new leads on a schedule." />
+</CardGrid>

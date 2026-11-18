@@ -1,0 +1,103 @@
+---
+title: "Webhooks"
+description: "Get an HTTPS call when people, opportunities, meetings or custom records change in Omniscient, and check each call's signature."
+sidebar:
+  label: "Webhooks"
+---
+
+import { Aside, CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
+
+A webhook sends a message to your own address when something changes in Omniscient. Use it to keep another system in step with your CRM.
+
+## Add a webhook
+
+<Steps>
+
+1. Go to **Settings**, then **Integrations**, and open **Developers** at the bottom.
+1. Under **Webhooks**, click **New webhook**.
+1. Type the **Address**. It must be a public `https` address.
+1. Pick the **Events** you want.
+1. Save. Omniscient copies the signing secret for you and shows it once. It starts with `whsec_`. Store it with your server's other secrets.
+
+</Steps>
+
+Click **Send test** to send a `ping` event. Turn a webhook off with its switch, or click **Delete** to remove it. A webhook that keeps failing shows a **Failing** tag.
+
+You can also add webhooks with the API: `POST /api/v1/webhooks` with `url` and `events`. Each key can have up to 10.
+
+## Events
+
+| Event | When it's sent |
+| --- | --- |
+| `contact.created` | A person is added |
+| `contact.updated` | A person changes |
+| `opportunity.created` | An opportunity is opened |
+| `opportunity.stage_changed` | An opportunity moves to another stage. Includes `old_stage`. |
+| `opportunity.closed` | An opportunity is won or lost |
+| `meeting.booked` | A meeting is booked |
+| `record.created` | A custom object record is added |
+| `record.updated` | A custom object record changes |
+| `ping` | You clicked **Send test** |
+
+## What each call looks like
+
+Omniscient sends a `POST` with a JSON body:
+
+```json
+{
+  "id": "6f1c2a4e-0d8b-4b52-9a51-2f1f3e7c9b10",
+  "event": "opportunity.stage_changed",
+  "created_at": "2026-11-18T15:04:05Z",
+  "data": { "id": "…", "name": "…", "stage": "proposal", "old_stage": "discovery" }
+}
+```
+
+`data` has the same shape as the API's records. Three headers come with it:
+
+| Header | What it holds |
+| --- | --- |
+| `Omniscient-Event` | The event name |
+| `Omniscient-Delivery` | The delivery's id. It stays the same when a call is retried. |
+| `Omniscient-Signature` | `t=<unix seconds>,v1=<hex>` |
+
+## Check the signature
+
+Check every call before you trust it:
+
+1. Read `t` and `v1` from `Omniscient-Signature`.
+1. Work out HMAC-SHA256 of `"<t>.<raw body>"` with your signing secret.
+1. Compare your result with `v1` using a constant-time compare.
+1. Reject the call if `t` is more than 5 minutes old.
+
+```js
+import crypto from 'node:crypto';
+
+export function verify(rawBody, header, secret) {
+  const parts = Object.fromEntries(header.split(',').map((p) => p.split('=')));
+  const expected = crypto.createHmac('sha256', secret).update(`${parts.t}.${rawBody}`).digest('hex');
+  const fresh = Math.abs(Date.now() / 1000 - Number(parts.t)) < 300;
+  const given = String(parts.v1 ?? '');
+  return fresh && given.length === expected.length && crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(given));
+}
+```
+
+## Retries
+
+Any `2xx` answer counts as delivered. Anything else, or no answer within 10 seconds, is tried again after 1, 5, 30, 120, 360, 480 and 480 minutes, about 24 hours in all. After that the delivery is dropped. Redirects are not followed.
+
+Use `Omniscient-Delivery` to skip a call you already handled.
+
+## Privacy
+
+Webhooks follow the same rules as the app. Meetings from mailboxes kept private never go out, and meeting titles go out only from mailboxes that share everything. People, companies and opportunities are the ones your whole workspace already sees.
+
+<Aside type="tip">
+For your own forms and lead tools, use the inbound addresses in **Settings**, then **Capture**. See [Opportunities and pipelines](/crm/opportunities-and-pipelines/#send-leads-from-another-tool).
+</Aside>
+
+## Next steps
+
+<CardGrid>
+  <LinkCard title="REST API" href="/developers/api/" description="Read and write records." />
+  <LinkCard title="MCP server" href="/developers/mcp/" description="Connect AI apps." />
+</CardGrid>

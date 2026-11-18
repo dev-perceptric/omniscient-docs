@@ -1,0 +1,117 @@
+---
+title: "API keys and the REST API"
+description: "Make an API key and use the Omniscient REST API to read and write people, companies, opportunities, notes, activities and custom objects."
+sidebar:
+  label: "REST API"
+---
+
+import { Aside, CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
+
+The REST API lets your own tools read and write Omniscient records. Most teams never need it: tools like Claritia and Arrowsterr connect with a button. Use the API when you build something of your own.
+
+Base address: `https://app.tryomniscient.com/api/v1`
+
+## Make an API key
+
+Owners and admins make keys.
+
+<Steps>
+
+1. Go to **Settings**, then **Integrations**.
+1. At the bottom, open **Developers**.
+1. Under **API keys**, click **New key**, give it a name and click **Make key**.
+1. Copy the key. It starts with `omn_` and is shown only once.
+
+</Steps>
+
+Each key belongs to one workspace and can read and write. It acts as the person who made it. Click **Revoke** next to a key to stop it, and anything using it stops working.
+
+<Aside type="caution">
+Keep keys on your server. Never put one in a web page, an app people download or a shared document. Omniscient stores only a fingerprint of each key, so a lost key can't be shown again. Make a new one instead.
+</Aside>
+
+## Make a request
+
+Send the key in the `Authorization` header on every call:
+
+```bash
+curl https://app.tryomniscient.com/api/v1/me \
+  -H "Authorization: Bearer omn_your_key"
+```
+
+`GET /me` answers with the workspace the key belongs to. Use it to check a connection.
+
+### Limits and errors
+
+- Up to 600 requests a minute per key. Past that you get `429` with a `Retry-After` header.
+- Request bodies can be up to 100 KB.
+- Errors come back as `{"error": {"code": "...", "message": "..."}}` with status `400`, `401`, `403`, `404`, `413`, `429` or `503`.
+
+### Lists
+
+List endpoints take `?limit=` (1 to 100, default 50) and `?offset=`. They return the newest first, as `{"data": [...], "limit": 50, "offset": 0}`.
+
+## Endpoints
+
+### People and companies
+
+The API calls people "contacts" and companies "accounts".
+
+| Method and path | What it does |
+| --- | --- |
+| `GET /contacts` | List people. Filter by `email` or `account_id`. |
+| `POST /contacts` | Create or update a person by email: `email`, `name`, `title`, `phone`, `company`, `domain`, `fields`, `source`, `external_id`. Answers `201` when new and `200` when it existed. |
+| `GET /contacts/:id` | One person |
+| `GET /accounts` | List companies. Filter by `domain`. |
+| `POST /accounts` | Create or update a company by domain: `domain`, `name`, `fields` |
+| `GET /accounts/:id` | One company |
+
+### Opportunities
+
+| Method and path | What it does |
+| --- | --- |
+| `GET /opportunities` | List opportunities. Filter by `account_id` or `stage`. |
+| `POST /opportunities` | Create one: `name`, `account_id` or `domain`, `pipeline` (id or name), `stage` (key or name), `amount`, `close_date` (YYYY-MM-DD), `owner_id` or `owner_email`. Leave out the pipeline and stage to use the default pipeline and its first stage. |
+| `GET /opportunities/:id` | One opportunity, with `stage_name` and `stage_kind` (`open`, `won` or `lost`) |
+
+### Leads, activity and notes
+
+| Method and path | What it does |
+| --- | --- |
+| `POST /leads` | Hand off someone ready to talk: `email`, `name`, `company`, `title`, `phone`, `source`, `reason`, `note`, `fields`, `owner_email`. Finds or makes the person, opens an opportunity (or returns their open one), picks the owner by your **Assignment** rule unless `owner_email` names one, and emails the owner. |
+| `POST /activities` | Log marketing activity on a person: `contact_id` or `email`, `type`, `title`, `body`, `url`, `occurred_at`, `source`, `data`. Shows in the **Marketing** card on their record. |
+| `POST /notes` | Add a note: `record_type` (`contact`, `account` or `opportunity`), `record_id`, `body`. Written as the person who made the key. |
+
+Activity types: `email_sent`, `email_opened`, `email_clicked`, `email_replied`, `page_view`, `form_submitted`, `meeting_booked`, `content_viewed` and `other`.
+
+### Custom objects
+
+| Method and path | What it does |
+| --- | --- |
+| `GET /objects` | Your workspace's custom objects, each with its `key` and fields. Formula and rollup fields are marked `read_only`. |
+| `GET /objects/:key/records` | Records of one object. Filter by `q` (name contains). |
+| `POST /objects/:key/records` | Create a record: `name`, `fields`, `owner_id` |
+| `GET /objects/:key/records/:id` | One record |
+| `PATCH /objects/:key/records/:id` | Change `name`, `fields` or `owner_id`. Only what you send changes. |
+
+### Relationships, owners and open times
+
+| Method and path | What it does |
+| --- | --- |
+| `GET /relationships` | Your relationship fields and what they link |
+| `POST /relationships` | Link or unlink two records: `relationship_id`, `record_id`, `target_id`, `side` (`out` or `in`), `op` (`add` or `remove`) |
+| `GET /owners` | Your team members: `id`, `email`, `name`, `role`, `timezone` |
+| `GET /owners/:id/availability` | Open slots from the calendars Omniscient syncs. Takes `from` and `to` (up to 14 days apart), `minutes` (15 to 120) and `timezone`. |
+
+## How field values are written
+
+- Values in `fields` are kept only for fields your workspace has. Add new ones in the [data model](/crm/data-model/).
+- Values a person typed in Omniscient are never overwritten by the API.
+- An unknown field in `PATCH /objects/...` is an error, so typos don't go unnoticed.
+
+## Next steps
+
+<CardGrid>
+  <LinkCard title="Webhooks" href="/developers/webhooks/" description="Get told when records change." />
+  <LinkCard title="MCP server" href="/developers/mcp/" description="Use Omniscient from Claude, ChatGPT or Cursor." />
+</CardGrid>

@@ -1,0 +1,76 @@
+---
+title: "Record pages"
+description: "What you see when you open a company, person or opportunity: Otto's brief, the timeline, emails, meetings, notes, files and fields."
+sidebar:
+  label: "Record pages"
+---
+
+import { Aside, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Open any row on a list to see its record. A record page has a header with the name, a short summary of what's next, tabs for its history and a rail of fields on the right.
+
+## Side panel or full page
+
+From a list, a record can open in a side panel next to the list or as a full page. Open the record's menu to switch: **Always open full page** or **Open in side panel next time**. Admins can set the default for each object in the [data model](/crm/data-model/), under **Layout**, then **Navigation**.
+
+## What's next
+
+Under the name, a record shows the parts it has:
+
+- The open opportunity and its stage.
+- **Brief**, a short summary tagged with Otto's name, plus the facts he found in your emails and calls.
+- The next meeting on the calendar.
+
+## Tabs
+
+| Tab | What it holds |
+| --- | --- |
+| Activity | Everything in time order: emails, meetings, call notes, notes and field changes |
+| Emails | Email threads with this record. Click one to read the whole thread. |
+| Meetings | Meetings coming up and past, each with its date |
+| Notes | Notes your team wrote, and call notes from Otto |
+| Files | Files added to the record. Drop files on the tab or click to upload, up to 25 MB each. |
+
+Each tab is its own address, so you can share a link straight to a record's emails or notes.
+
+### Field history
+
+Every field change shows on the **Activity** tab with who made it: **You**, **Otto** or **Sync**. You can see what a field was before and what it is now.
+
+## Fields
+
+The rail on the right shows the record's fields in groups. Click a value to change it. The **More** group holds the rest of the fields, and **System** shows when the record was created and its last touch. Admins can change the groups in the [data model](/crm/data-model/).
+
+To add a field right from the record, open **More** and add it there.
+
+People also show a **Marketing** card when a connected tool, such as Claritia or Arrowsterr, logs activity like a form fill or an email click.
+
+## Write a note
+
+Open the **Notes** tab, type in **Write a note** and click **Add note**.
+
+You can also see and add notes across the whole CRM from **Notes** in the sidebar. Click **New note**, link it to a company, opportunity or person, and write the note.
+
+## Email from a record
+
+Click **New email** at the top of the **Emails** tab to write to this person or company from your own mailbox. See [Email](/email-and-calendar/email/) for sending and replies.
+
+## Record menu
+
+The **⋯** menu on a record holds:
+
+- **Merge a duplicate** (companies and people)
+- **Copy link**
+- **Always open full page** or **Open in side panel next time**
+- **Delete**
+
+<Aside type="tip">
+Ask Otto about the record you are looking at. The Otto box at the bottom of the page knows which record is open, so "what did we agree last time?" just works.
+</Aside>
+
+## Next steps
+
+<CardGrid>
+  <LinkCard title="Record updates and drafts" href="/otto/record-updates-and-drafts/" description="Accept or skip what Otto suggests." />
+  <LinkCard title="Data model" href="/crm/data-model/" description="Change fields, groups and how records open." />
+</CardGrid>

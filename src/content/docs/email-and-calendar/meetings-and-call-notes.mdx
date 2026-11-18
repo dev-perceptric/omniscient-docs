@@ -1,0 +1,90 @@
+---
+title: "Meetings, prep briefs and call notes"
+description: "See your meetings with customers, get a prep brief before each one, and get notes and record updates from Google Meet, Microsoft Teams, Zoom or a transcript you add."
+sidebar:
+  label: "Meetings and call notes"
+---
+
+import { Aside, CardGrid, LinkCard, Steps, TabItem, Tabs } from '@astrojs/starlight/components';
+
+Your calendar syncs with your mailbox. Each meeting with people outside your team lands on their records, gets a prep brief before it starts, and gets notes from Otto after it ends.
+
+## The Meetings page
+
+Click **Meetings** under **Intelligence** in the sidebar. Switch between **Upcoming**, **Past** and **All**, and use **Search meetings** to find one. The list shows each meeting with when it is, how long it runs, the company, the opportunity and the attendees. A **Prep brief ready** tag shows on meetings Otto has prepared.
+
+To track internal meetings too, set **Calendar** to **All meetings** in your [sync settings](/get-started/connect-your-inbox/#choose-what-syncs).
+
+## A meeting's page
+
+Click a meeting to open it. It has two tabs:
+
+- **Prep brief** opens first for meetings that haven't happened yet.
+- **Notes** opens first once the meeting is over.
+
+The rail on the right shows the details and the people on the invite, linked to their records.
+
+### Prep brief
+
+Up to a day before a meeting with a customer, Otto writes a short brief: who is coming, where things stand, what is still open and what to aim for. Prep briefs are on Pro and Business.
+
+For a fuller brief, or a brief for all of today's meetings, ask Otto "prep me for my meetings today". See [Skills and Knowledge](/otto/skills-and-knowledge/#system-skills).
+
+### Notes and what we learned
+
+After the call, the **Notes** tab shows Otto's notes, the next steps and the promises made. **What we learned** lists the facts Otto pulled out. **Record updates to review** lists changes Otto suggests for the company, person or opportunity, each with **Accept** and **Skip**. See [Record updates and drafts](/otto/record-updates-and-drafts/).
+
+## Turn on call notes
+
+Otto writes notes from the transcripts your meeting tools already make. Nothing joins your calls.
+
+<Steps>
+
+1. Go to **Settings**, then **Call notes**.
+1. For Google accounts, click **Turn on** next to **Google Meet**. For Microsoft accounts, click **Turn on** next to **Microsoft Teams**. Approve the extra access.
+1. For Zoom, click **Connect Zoom** and sign in. Add more Zoom accounts the same way.
+
+</Steps>
+
+Then pick which calls get notes under **Which calls get notes**:
+
+| Option | What it covers |
+| --- | --- |
+| Notes for external meetings only | Calls with people outside your company. This is the suggested choice. |
+| Notes for all meetings | Every call you're in, including internal ones |
+| No call notes | None. You can still add notes to any meeting from its page. |
+
+Click **Save** when you are done.
+
+<Aside type="tip">
+Transcripts have to be on in your meeting tool. In Google Meet, Teams and Zoom, turn on transcription or recording for your calls so there's a transcript for Otto to read.
+</Aside>
+
+### Notes from notetaker apps
+
+If you use a notetaker like Otter, Fireflies, Fathom, tl;dv, Read.ai, Zoom AI Companion or Gemini, its summary emails in your inbox are matched to the meeting and show on it too.
+
+## Add notes yourself
+
+For a past meeting without notes, open it and click **Add notes**. The **Add call notes** window has three ways in:
+
+<Tabs>
+  <TabItem label="Paste text">
+Paste the transcript into the box.
+  </TabItem>
+  <TabItem label="Transcript file">
+Choose a .txt, .vtt or .srt file. Zoom, Meet, Teams and most note takers export these.
+  </TabItem>
+  <TabItem label="Recording">
+Choose an audio or video file up to 500 MB. Omniscient turns the speech into text, then deletes the audio.
+  </TabItem>
+</Tabs>
+
+Otto writes the notes and pulls out next steps, promises and deal details. The transcript itself is not stored.
+
+## Next steps
+
+<CardGrid>
+  <LinkCard title="Zoom" href="/integrations/zoom/" description="Connect Zoom for call notes." />
+  <LinkCard title="Workflows" href="/otto/workflows/" description="Follow up when a meeting ends with notes." />
+</CardGrid>

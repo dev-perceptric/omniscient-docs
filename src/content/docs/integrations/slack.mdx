@@ -1,0 +1,49 @@
+---
+title: "Slack"
+description: "Add Omniscient to Slack to post the team digest each weekday morning and send workflow notices to the channel you pick."
+sidebar:
+  label: "Slack"
+---
+
+import { Aside, CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
+
+With Slack connected, Omniscient posts to one channel your team picks. Owners and admins connect it once for the whole workspace.
+
+## What Omniscient posts
+
+- **The team digest**, each weekday morning in the owner's time zone: today's meetings, emails to answer and opportunities that need attention.
+- **Workflow notices** from **Notify owner** steps, so owners see them where they already work. See [Workflows](/otto/workflows/).
+
+## Add Omniscient to Slack
+
+<Steps>
+
+1. Go to **Settings**, then **Notifications**.
+1. Next to **Team digest in Slack**, click **Add to Slack**.
+1. Sign in to Slack and approve the Omniscient app.
+1. Back in Omniscient, pick the **Channel** to post in. The app joins a public channel by itself.
+
+</Steps>
+
+You can also connect Slack from its card in **Settings**, then **Integrations**, and pick the channel in its sheet.
+
+When it's connected, **Team digest in Slack** shows **Connected**. To post somewhere else, pick another channel.
+
+## Disconnect Slack
+
+Click **Disconnect Slack** next to **Team digest in Slack** and confirm. The team digest stops posting.
+
+<Aside type="note">
+If your workspace connected Slack earlier with a webhook address, it keeps posting there. Clicking **Reconnect** on Slack's card in **Integrations** moves it to the Slack app.
+</Aside>
+
+## Each person's email digest
+
+The Slack digest is for the team. Each person can also get their own digest by email. Turn **Email me my digest** on or off in **Settings**, then **Notifications**. See [Account and security](/workspace/account-and-security/#notifications).
+
+## Next steps
+
+<CardGrid>
+  <LinkCard title="Workflows" href="/otto/workflows/" description="Use Notify owner steps." />
+  <LinkCard title="Integrations" href="/integrations/" description="Every tool you can connect." />
+</CardGrid>
