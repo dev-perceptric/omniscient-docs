@@ -40,17 +40,31 @@ These are the lines on each plan card in **Settings**, then **Plans & billing**.
 
 Free has none of the lines above and 0 agents.
 
-### What the app checks today
+### What each plan locks
 
-Most plan lines are not locked in the app yet. These are:
+The app locks every line on the plan cards, in the app and on the server. Picking a locked control shows a lock and opens **Plans & billing**, or shows a line like "Prep briefs come with Pro".
 
 | Feature | Lowest plan | What happens on a lower plan |
 | --- | --- | --- |
-| Kanban board on Companies, People and Opportunities | Pro | Picking **Kanban** opens **Plans & billing** |
+| Meeting notes | Starter | **Add notes** shows a lock and opens **Plans & billing**. No notes are written from Meet, Teams or Zoom transcripts, uploads, recordings or notetaker emails. |
+| Follow-up drafts | Starter | Agents and the app write no drafts: "Follow-up drafts come with Starter" |
+| Pipeline board | Pro | Picking **Kanban** on Companies, People, Opportunities or a custom object opens **Plans & billing**. A saved board view shows as a table. |
+| Forecast | Pro | The **Review the pipeline** skill shows a **Pro** tag and isn't in the **/** menu. Otto doesn't pick it. |
+| Fields filled by rules | Pro | A field's **Otto fills it** box shows "Fields filled by rules come with Pro" and **Upgrade**. Otto fills nothing from emails or calls. |
+| Prep briefs | Pro | No new prep briefs. The **Prep brief** tab shows the lock. The **Prep for a meeting** skill shows a **Pro** tag. |
 | Free seats | Pro | The seat menu doesn't show. The database answers "Free seats come with Pro and Business". |
 | Agents | Starter (2), Pro (5), Business (15) | Adding one more answers "Your plan includes 5 agents" |
+| MEDDIC and deal reviews | Business | The **Qualify a deal** skill shows a **Business** tag and isn't in the **/** menu |
+| Admin controls | Business | **Sign-in** shows "Admin controls come with Business" with **Upgrade**. Two-step for everyone, ways in, session length, domains, single sign-on, SCIM keys and the audit log are locked. Invite links still work. |
+| Manager mode and coaching | Business | Not in the app yet |
 
-The plan rules in the app's code also name Ask Otto, meetings and drafts as Starter features, and field rules and prep as Pro features. They are not locked yet: check.
+The 14-day trial is Pro, so Business features are locked during the trial too.
+
+<Aside type="note">
+A lower plan never deletes anything. Notes, briefs, field rules, saved views, domains, single sign-on and SCIM keys stay as they were. They work again after an upgrade.
+
+Sign-in rules you set on Business keep working after you move to a lower plan, so nobody gets locked out. Owners and admins can still turn them off with **Turn off** in **Sign-in**.
+</Aside>
 
 ### Team discounts
 

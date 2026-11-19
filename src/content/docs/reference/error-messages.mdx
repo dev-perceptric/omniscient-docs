@@ -65,6 +65,7 @@ This page lists the messages Omniscient shows when something can't be done. Find
 | Add an email to your account first. | A passkey needs an account email | Add an email in **Settings**, then **Account** |
 | Type the number with its country code, like +1 415 555 0100. | The phone number for text codes is missing its country code | Add `+` and the country code |
 | That isn't your email. | You typed a different email to confirm deleting your account | Type your own email exactly |
+| Make someone else the owner of *workspace* first, in Settings › Members. | You own a workspace with other people in it, so your account can't be deleted yet | Click **Make owner** next to a teammate in [Members](/settings/members/#make-someone-else-the-owner), then try again |
 | Confirm the change from both *old email* and *new email* | An email change needs both addresses to agree | Click the link sent to each address |
 | Keep at least one way in. | You tried to turn off every sign-in option | Leave at least one on |
 | Turn on two-step verification for yourself first | Admins can only ask everyone for two-step once they use it | Set up two-step in **Settings**, then **Security** |
@@ -81,9 +82,11 @@ This page lists the messages Omniscient shows when something can't be done. Find
 | Only owners and admins can remove people. | Members can't remove people | Ask an admin |
 | Only owners and admins can change roles | Members can't change roles | Ask an admin |
 | Only owners and admins can change seats | Members can't change Seller or Free seats | Ask an admin |
-| The owner can't be removed. | The owner can't leave or be removed | Write to support to hand the workspace over (check) |
-| The owner's role can't be changed | The owner stays the owner | Write to support to hand the workspace over (check) |
-| Only the owner can do this / Only the owner can do this to the owner | Only the owner can change the owner | Ask the owner |
+| The owner can't be removed. | The owner can't leave or be removed | The owner clicks **Make owner** next to a teammate first. See [Members settings](/settings/members/#make-someone-else-the-owner). |
+| The owner's role can't be changed | The owner stays the owner until they hand it over | The owner clicks **Make owner** next to a teammate |
+| Only the owner can do this / Only the owner can do this to the owner | Only the owner can change the owner. You also see it if your second sign-in step isn't done. | Ask the owner, or finish two-step and try again |
+| You already own this workspace | You tried to make yourself the owner | Pick a teammate |
+| Couldn't make *email* the owner | The hand-over didn't go through | Click **Retry** |
 | That person isn't on the team. | They already left or were removed | Reload **Members** |
 | That invite isn't open. | The invite was used or taken back | Send a new invite |
 | Couldn't send the invite email. Try again. / Couldn't email *address* | The invite email didn't go out | Click **Retry**, or copy an invite link instead |
@@ -103,6 +106,13 @@ This page lists the messages Omniscient shows when something can't be done. Find
 | Free seats come with Pro and Business | Free seats need Pro or Business | Upgrade, or make the person a Seller seat |
 | A workspace needs at least one seller seat | Everyone can't be on a Free seat | Keep one Seller seat |
 | Your plan includes *5* agents | You reached your plan's agent limit | Remove one, or upgrade |
+| Meeting notes come with Starter | You're on Free. Notes from transcripts, recordings and notetaker emails need Starter or higher. | Upgrade in **Plans & billing** |
+| Follow-up drafts come with Starter | You're on Free | Upgrade in **Plans & billing** |
+| The forecast comes with Pro | **Review the pipeline** needs Pro or Business | Upgrade |
+| Prep briefs come with Pro | Prep briefs and **Prep for a meeting** need Pro or Business | Upgrade |
+| Fields filled by rules come with Pro | Otto filling a field needs Pro or Business. Rules you set before stay saved. | Upgrade, or set the field to **Off** |
+| MEDDIC and deal reviews come with Business | **Qualify a deal** needs Business | Upgrade |
+| Admin controls come with Business | Sign-in rules, domains, single sign-on, SCIM keys and the audit log need Business | Upgrade. You can still turn old rules off. |
 | Plan updated. It can take a minute to show here. | Payment went through. This is good news. | Wait a minute and reload |
 | Payment failed | The last charge didn't go through | Click **Manage billing** and update your card |
 

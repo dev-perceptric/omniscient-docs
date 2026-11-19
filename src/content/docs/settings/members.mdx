@@ -1,6 +1,6 @@
 ---
 title: "Members settings"
-description: "Settings, Members: invite people by email, pick their role and seat, let your team domain join, resend or withdraw invites, sign people out and remove them."
+description: "Settings, Members: invite people by email, pick their role and seat, let your team domain join, resend or withdraw invites, make someone else the owner, sign people out and remove them."
 sidebar:
   label: "Members"
 ---
@@ -47,6 +47,7 @@ A row shows the person's email, their role tag (**Owner**, **Admin** or **Member
 | --- | --- | --- |
 | **Role** menu | Owners and admins, on anyone but the owner and themselves | Switch between **Member** and **Admin** |
 | Seat menu | Owners and admins, on Pro and Business | **Seller seat** or **Free seat**. Only Seller seats are billed. |
+| **Make owner** | The owner, on anyone else on the team | Asks "Make *email* the owner?" and hands the workspace to them. You become an admin. |
 | **Send again** | Owners and admins, on open invites | Sends the invite email again: "Invite sent again to *email*" |
 | **Withdraw invite** | Owners and admins, on open invites | Asks "Withdraw the invite for *email*?" and cancels it |
 | **Sign out everywhere** | Owners and admins | Asks "Sign *email* out everywhere?" and ends all their sessions. Use it when a laptop is lost. |
@@ -54,8 +55,24 @@ A row shows the person's email, their role tag (**Owner**, **Admin** or **Member
 | **Leave workspace** | Anyone but the owner, on their own row | Asks "Leave *workspace*?" Your inboxes in this workspace are disconnected. |
 
 <Aside type="note">
-The owner can't be removed and can't leave. See [Roles and permissions](/workspace/roles-and-permissions/).
+The owner can't be removed and can't leave. To step away, make someone else the owner first. See [Roles and permissions](/workspace/roles-and-permissions/).
 </Aside>
+
+## Make someone else the owner
+
+A workspace has one owner. Only the owner can hand it to someone else, and only to a person who already joined.
+
+<Steps>
+
+1. Find the person's row. Pick someone who has joined. An open invite isn't enough.
+1. Click **Make owner**, the crown button.
+1. Read "Make *email* the owner?" and click **Make owner**.
+
+</Steps>
+
+You see "*email* is now the owner". They get the **Owner** tag, and you become an admin. Only the new owner can give it back.
+
+The change shows in both people's sign-in history in **Settings**, then **Security**, and in the workspace's audit log in **Sign-in**. If you use two-step sign-in, finish your second step first. If it fails, you see one short line with **Retry**.
 
 ## Seats and billing
 
