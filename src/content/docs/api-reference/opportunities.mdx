@@ -93,7 +93,7 @@ curl "https://app.tryomniscient.com/api/v1/opportunities?stage=proposal&limit=20
 }
 ```
 
-The `stage` filter matches the stage key, not the name. The [MCP tool](/api-reference/mcp-tools/#describe_fields) `describe_fields` lists each pipeline's stages with their keys.
+The `stage` filter matches the stage key, like `proposal`. The [MCP tool](/api-reference/mcp-tools/#describe_fields) `describe_fields` lists each pipeline's stages with their keys.
 
 ## GET /opportunities/:id
 
@@ -124,7 +124,7 @@ POST https://app.tryomniscient.com/api/v1/opportunities
 | `account_name` | string | No | With `domain`: the name for a new company |
 | `pipeline` | string | No | The pipeline's id or name. Left out, the default pipeline. |
 | `stage` | string | No | The stage's key or name. Left out, the pipeline's first open stage. |
-| `amount` | number | No | Send a number, not a string |
+| `amount` | number | No | A JSON number, like `12000` |
 | `close_date` | string | No | `YYYY-MM-DD`. Other formats are ignored. |
 | `owner_id` | string | No | A team member's user id |
 | `owner_email` | string | No | Instead of `owner_id`: a team member's email |

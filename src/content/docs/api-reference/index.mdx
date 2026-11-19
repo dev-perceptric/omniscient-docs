@@ -92,7 +92,7 @@ Every error has the same body:
 | 500 | `server_error` | Something failed on Omniscient's side. Try again. |
 | 503 | `not_configured` | The API isn't set up on this server yet |
 
-Messages are plain sentences you can show to a person. They can change, so check `code` in your code, not `message`.
+Messages are plain sentences you can show to a person. They can change, so check `code` in your code.
 
 <Aside type="tip">
 Retry `429`, `500` and `503` with growing waits, such as 1, 2, 4 and 8 seconds. Don't retry `400`, `401`, `403` or `404`: the same request will fail the same way.
