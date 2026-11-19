@@ -1,0 +1,165 @@
+---
+title: "API reference"
+description: "Every Omniscient REST endpoint and MCP tool: the base address, how to sign requests, limits, paging, errors and how field values are written."
+sidebar:
+  label: "Overview"
+---
+
+import { Aside, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+The Omniscient REST API reads and writes the records in one workspace: people, companies, opportunities, notes, marketing activity, custom objects and the links between them. This section lists every endpoint with its parameters, a sample request, a sample reply and the errors it can return. The last page lists the tools of the MCP server.
+
+If you are new to the API, start with [API keys and the REST API](/developers/api/). It shows how to make a key in the app.
+
+## Base address
+
+```http
+https://app.tryomniscient.com/api/v1
+```
+
+Every path in this section is relative to that address. `GET /contacts` means `GET https://app.tryomniscient.com/api/v1/contacts`.
+
+## Sign every request
+
+Send your key in the `Authorization` header as a Bearer token:
+
+```bash
+curl https://app.tryomniscient.com/api/v1/me \
+  -H "Authorization: Bearer omn_your_key"
+```
+
+A key starts with `omn_`. It belongs to one workspace, and every query it makes stays inside that workspace. Writes are recorded as the person who made the key. See [Authentication](/api-reference/authentication/) for keys, the Connect button and OAuth.
+
+## Scopes
+
+Each key has scopes. `GET` calls need `read`. `POST`, `PATCH` and `DELETE` calls need `write`. Keys made in **Settings** and keys made by the Connect button have both.
+
+A key without the right scope gets `403` with the message `This key can't write.` or `This key can't read.`
+
+## Limits
+
+| Limit | Value |
+| --- | --- |
+| Requests per key | 600 a minute. Past that you get `429` and a `Retry-After` header with the seconds to wait. |
+| Request body | 100 KB. A bigger body gets `413`. |
+| Page size | 1 to 100 rows, 50 when you leave it out |
+| Webhooks per key | 10 |
+| Free times per call | 14 days, up to 50 slots |
+
+## Paging
+
+List endpoints take two query parameters:
+
+| Parameter | Default | What it does |
+| --- | --- | --- |
+| `limit` | `50` | How many rows to return, from 1 to 100 |
+| `offset` | `0` | How many rows to skip |
+
+Rows come back newest first. The reply always has the same shape:
+
+```json
+{
+  "data": [ { "id": "…" } ],
+  "limit": 50,
+  "offset": 0
+}
+```
+
+To read every row, keep adding `limit` to `offset` until `data` holds fewer rows than `limit`.
+
+## Errors
+
+Every error has the same body:
+
+```json
+{
+  "error": {
+    "code": "bad_request",
+    "message": "email is required and must be valid"
+  }
+}
+```
+
+| Status | `code` | What it means |
+| --- | --- | --- |
+| 400 | `bad_request` | Something in the request is missing or wrong. The message says what. |
+| 400 | `invalid_code` | A Connect code is wrong, used or expired |
+| 401 | `unauthorized` | The key is missing, mistyped or revoked |
+| 403 | `forbidden` | The key doesn't have the scope this call needs |
+| 404 | `not_found` | No record, list, object or owner with that id in this workspace |
+| 413 | `too_large` | The body is over 100 KB |
+| 429 | `rate_limited` | More than 600 calls in a minute. Wait for `Retry-After` seconds. |
+| 500 | `server_error` | Something failed on Omniscient's side. Try again. |
+| 503 | `not_configured` | The API isn't set up on this server yet |
+
+Messages are plain sentences you can show to a person. They can change, so check `code` in your code, not `message`.
+
+<Aside type="tip">
+Retry `429`, `500` and `503` with growing waits, such as 1, 2, 4 and 8 seconds. Don't retry `400`, `401`, `403` or `404`: the same request will fail the same way.
+</Aside>
+
+## Names in the API
+
+The API uses the database's names. The app shows friendlier ones, and your workspace may rename them too, like "Clients" for companies.
+
+| In the app | In the API |
+| --- | --- |
+| People | `contacts` |
+| Companies | `accounts` |
+| Opportunities | `opportunities` |
+| Custom objects | `objects`, with keys like `o_projects` |
+
+## How field values are written
+
+- `fields` holds custom field values by their key. Values for fields your workspace doesn't have are dropped. Add fields in the [data model](/crm/data-model/).
+- When a person or company already exists, the API only fills fields that are empty. A value that is already there stays.
+- On custom object records, an unknown field key is an error, so a typo never vanishes.
+- Formula and rollup fields are worked out by Omniscient and can't be set.
+- Ids are UUIDs, like `0b6f3c52-8d1e-4f7a-9c2b-5e4d3a2b1c0d`. Dates are `YYYY-MM-DD`. Times are ISO 8601 in UTC.
+
+## Endpoints
+
+| Method and path | What it does | Page |
+| --- | --- | --- |
+| `GET /me` | The workspace and key | [Me](/api-reference/me/) |
+| `GET /contacts` | List people | [Contacts](/api-reference/contacts/) |
+| `POST /contacts` | Create or update a person by email | [Contacts](/api-reference/contacts/) |
+| `GET /contacts/:id` | One person | [Contacts](/api-reference/contacts/) |
+| `GET /accounts` | List companies | [Accounts](/api-reference/accounts/) |
+| `POST /accounts` | Create or update a company by domain | [Accounts](/api-reference/accounts/) |
+| `GET /accounts/:id` | One company | [Accounts](/api-reference/accounts/) |
+| `GET /opportunities` | List opportunities | [Opportunities](/api-reference/opportunities/) |
+| `POST /opportunities` | Open an opportunity | [Opportunities](/api-reference/opportunities/) |
+| `GET /opportunities/:id` | One opportunity | [Opportunities](/api-reference/opportunities/) |
+| `POST /leads` | Hand off a person ready to talk | [Leads](/api-reference/leads/) |
+| `POST /activities` | Log marketing activity on a person | [Activities](/api-reference/activities/) |
+| `POST /notes` | Add a note to a record | [Notes](/api-reference/notes/) |
+| `GET /objects` | List custom objects and their fields | [Custom objects](/api-reference/custom-objects/) |
+| `GET /objects/:key/records` | List records of one object | [Custom objects](/api-reference/custom-objects/) |
+| `POST /objects/:key/records` | Create a record | [Custom objects](/api-reference/custom-objects/) |
+| `GET /objects/:key/records/:id` | One record | [Custom objects](/api-reference/custom-objects/) |
+| `PATCH /objects/:key/records/:id` | Change a record | [Custom objects](/api-reference/custom-objects/) |
+| `GET /lists` | Process lists and their entry fields | [Lists](/api-reference/lists/) |
+| `GET /lists/:id/entries` | Entries of one list | [Lists](/api-reference/lists/) |
+| `POST /lists/:id/entries` | Add a record to a list | [Lists](/api-reference/lists/) |
+| `PATCH /lists/:id/entries` | Change an entry's fields | [Lists](/api-reference/lists/) |
+| `DELETE /lists/:id/entries` | Take a record out of a list | [Lists](/api-reference/lists/) |
+| `GET /relationships` | Relationship fields | [Relationships](/api-reference/relationships/) |
+| `POST /relationships` | Link or unlink two records | [Relationships](/api-reference/relationships/) |
+| `GET /owners` | Team members | [Owners](/api-reference/owners/) |
+| `GET /owners/:id/availability` | An owner's free times | [Owners](/api-reference/owners/) |
+| `GET /webhooks` | This key's webhooks | [Webhook subscriptions](/api-reference/webhook-subscriptions/) |
+| `POST /webhooks` | Add a webhook | [Webhook subscriptions](/api-reference/webhook-subscriptions/) |
+| `DELETE /webhooks` | Remove a webhook | [Webhook subscriptions](/api-reference/webhook-subscriptions/) |
+| `POST /connect/token` | Trade a Connect code for a key | [Authentication](/api-reference/authentication/) |
+
+Outside `/api/v1`, forms and lead tools post to [capture addresses](/api-reference/capture/), and AI apps use the [MCP server](/api-reference/mcp-tools/).
+
+## Next steps
+
+<CardGrid>
+  <LinkCard title="Authentication" href="/api-reference/authentication/" description="Keys, the Connect button and OAuth." />
+  <LinkCard title="Contacts" href="/api-reference/contacts/" description="The first endpoint most tools use." />
+  <LinkCard title="Webhook events" href="/developers/webhooks/" description="Get told when records change." />
+  <LinkCard title="MCP tools" href="/api-reference/mcp-tools/" description="Every tool your AI app can call." />
+</CardGrid>

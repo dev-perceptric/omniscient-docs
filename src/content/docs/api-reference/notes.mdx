@@ -1,0 +1,66 @@
+---
+title: "POST /notes"
+description: "Add a note to a person, company or opportunity in Omniscient with POST /notes. The note is written as the person who made the key."
+sidebar:
+  label: "POST /notes"
+---
+
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Adds a note to a record. It shows on the record's **Notes** tab and on the **Notes** page, written by the person who made the API key.
+
+```http
+POST https://app.tryomniscient.com/api/v1/notes
+```
+
+**Scope:** `write`
+
+## Body
+
+| Field | Type | Required | What it does |
+| --- | --- | --- | --- |
+| `record_type` | string | Yes | `contact`, `account` or `opportunity` |
+| `record_id` | string | Yes | The record's id |
+| `body` | string | Yes | The note. Plain text or markdown, up to 20,000 characters. |
+
+## Request
+
+```bash
+curl -X POST https://app.tryomniscient.com/api/v1/notes \
+  -H "Authorization: Bearer omn_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "record_type": "opportunity",
+    "record_id": "0b6f3c52-8d1e-4f7a-9c2b-5e4d3a2b1c0d",
+    "body": "## Support call\n\nAsked about SSO and the data export. Sent the security pack."
+  }'
+```
+
+## Response
+
+`201 Created`
+
+```json
+{ "id": "c1d2e3f4-a5b6-4c7d-8e9f-0a1b2c3d4e5f" }
+```
+
+## Errors
+
+| Status | `code` | `message` |
+| --- | --- | --- |
+| 400 | `bad_request` | `record_id must be an id.` |
+| 400 | `bad_request` | `record_type must be contact, account or opportunity` |
+| 400 | `bad_request` | `body is required` |
+| 400 | `bad_request` | `the key's maker left the workspace; make a new key` |
+| 404 | `not_found` | `record not found` |
+| 401 | `unauthorized` | The key is missing or revoked |
+| 403 | `forbidden` | `This key can't write.` |
+
+Notes can't be read or changed through the REST API. The [MCP tool](/api-reference/mcp-tools/#get_record) `get_record` returns a record's latest ten notes.
+
+## Related
+
+<CardGrid>
+  <LinkCard title="Notes page" href="/crm/notes/" description="Every note in the workspace." />
+  <LinkCard title="MCP add_note" href="/api-reference/mcp-tools/#add_note" description="The same from an AI app." />
+</CardGrid>

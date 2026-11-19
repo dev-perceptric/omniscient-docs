@@ -1,0 +1,181 @@
+---
+title: "Contacts"
+description: "List, read, create and update people in Omniscient with GET /contacts, GET /contacts/:id and POST /contacts, which finds a person by email."
+sidebar:
+  label: "Contacts"
+---
+
+import { Aside, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+The API calls people "contacts". A contact is one person with one email address. Each contact can belong to one company, which the API calls an account.
+
+## The contact object
+
+```json
+{
+  "id": "a3b1c2d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+  "email": "maya@lumenhealth.example.com",
+  "name": "Maya Patel",
+  "account_id": "7c8d9e0f-1a2b-4c3d-8e4f-5a6b7c8d9e0f",
+  "lifecycle": "customer",
+  "title": "VP Operations",
+  "phone": "+1 555 0142",
+  "fields": { "title": "VP Operations", "phone": "+1 555 0142", "city": "Boston" },
+  "last_activity_at": "2026-11-17T15:20:00+00:00",
+  "created_at": "2026-10-02T09:12:44+00:00"
+}
+```
+
+| Field | Type | What it is |
+| --- | --- | --- |
+| `id` | string | The person's id |
+| `email` | string | Their email, in lower case |
+| `name` | string or null | Their full name |
+| `account_id` | string or null | Their company's id |
+| `lifecycle` | string or null | Where they are with you, like `lead` or `customer` |
+| `title` | string or null | Their job title. The same value as `fields.title`. |
+| `phone` | string or null | Their phone. The same value as `fields.phone`. |
+| `fields` | object | Every custom field value, by key |
+| `last_activity_at` | string or null | The last email or meeting with them |
+| `created_at` | string | When they were added |
+
+People that were merged into another person don't show in lists.
+
+## GET /contacts
+
+Lists people, newest first.
+
+```http
+GET https://app.tryomniscient.com/api/v1/contacts
+```
+
+**Scope:** `read`
+
+| Parameter | Type | What it does |
+| --- | --- | --- |
+| `email` | string | Only the person with this email. Case doesn't matter. |
+| `account_id` | string | Only people at this company |
+| `limit` | number | 1 to 100, default 50 |
+| `offset` | number | Rows to skip, default 0 |
+
+```bash
+curl "https://app.tryomniscient.com/api/v1/contacts?email=maya@lumenhealth.example.com" \
+  -H "Authorization: Bearer omn_your_key"
+```
+
+`200 OK`
+
+```json
+{
+  "data": [
+    {
+      "id": "a3b1c2d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+      "email": "maya@lumenhealth.example.com",
+      "name": "Maya Patel",
+      "account_id": "7c8d9e0f-1a2b-4c3d-8e4f-5a6b7c8d9e0f",
+      "lifecycle": "customer",
+      "title": "VP Operations",
+      "phone": null,
+      "fields": { "title": "VP Operations" },
+      "last_activity_at": "2026-11-17T15:20:00+00:00",
+      "created_at": "2026-10-02T09:12:44+00:00"
+    }
+  ],
+  "limit": 50,
+  "offset": 0
+}
+```
+
+An email with no match returns `"data": []`, not an error.
+
+## GET /contacts/:id
+
+Reads one person.
+
+```http
+GET https://app.tryomniscient.com/api/v1/contacts/a3b1c2d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d
+```
+
+**Scope:** `read`
+
+```bash
+curl https://app.tryomniscient.com/api/v1/contacts/a3b1c2d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d \
+  -H "Authorization: Bearer omn_your_key"
+```
+
+`200 OK` with one contact object.
+
+## POST /contacts
+
+Creates a person, or updates the one that already has this email. Safe to call again with the same email.
+
+```http
+POST https://app.tryomniscient.com/api/v1/contacts
+```
+
+**Scope:** `write`
+
+| Field | Type | Required | What it does |
+| --- | --- | --- | --- |
+| `email` | string | Yes | Finds the person. Must look like an email. |
+| `name` | string | No | Full name, up to 200 characters. Fills the name only when it is empty. |
+| `title` | string | No | Job title, up to 200 characters |
+| `phone` | string | No | Phone, up to 40 characters |
+| `company` | string | No | Company name, used when Omniscient makes the company |
+| `domain` | string | No | Company website, like `lumenhealth.example.com`. Left out, Omniscient uses the email's domain. |
+| `fields` | object | No | Custom field values by key |
+| `source` | string | No | Your system's name, like `claritia`. With `external_id`, it stores your id on the person. |
+| `external_id` | string | No | The person's id in your system |
+
+```bash
+curl -X POST https://app.tryomniscient.com/api/v1/contacts \
+  -H "Authorization: Bearer omn_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "daniel@brightline.example.com",
+    "name": "Daniel Okafor",
+    "title": "Head of Logistics",
+    "company": "Brightline Freight",
+    "fields": { "city": "Chicago" },
+    "source": "webinar-tool",
+    "external_id": "att_4821"
+  }'
+```
+
+`201 Created` when the person is new, `200 OK` when they already existed. The body is the contact object.
+
+### What happens to the company
+
+- With `domain`, or a work email, Omniscient finds the company with that domain or makes it. A new company is named from `company`, or from the first part of the domain, like "Brightline".
+- Free email domains, like Gmail or Outlook, never make a company.
+- A person who already has a company keeps it.
+
+### What happens to existing values
+
+- On a new person, every value you send is saved.
+- On an existing person, only empty fields are filled. A name, title or field value already there stays as it is.
+- Keys in `fields` that your workspace doesn't have are dropped. When you send `title` or `phone`, Omniscient adds those two fields if they are missing.
+
+<Aside type="tip">
+To change a value that is already set, use the [MCP tool](/api-reference/mcp-tools/#update_record) `update_record`, or change it in the app.
+</Aside>
+
+## Errors
+
+| Status | `code` | `message` |
+| --- | --- | --- |
+| 400 | `bad_request` | `email is required and must be valid` |
+| 400 | `bad_request` | `account_id must be an id.` |
+| 400 | `bad_request` | `Send a JSON object.` or `That isn't valid JSON.` |
+| 401 | `unauthorized` | The key is missing or revoked |
+| 403 | `forbidden` | `This key can't write.` |
+| 404 | `not_found` | `Contact not found.` |
+| 413 | `too_large` | `Bodies are limited to 100 KB.` |
+
+## Related
+
+<CardGrid>
+  <LinkCard title="Accounts" href="/api-reference/accounts/" description="The companies people belong to." />
+  <LinkCard title="POST /leads" href="/api-reference/leads/" description="Hand a person to your team with an opportunity." />
+  <LinkCard title="POST /activities" href="/api-reference/activities/" description="Log what a person did." />
+</CardGrid>

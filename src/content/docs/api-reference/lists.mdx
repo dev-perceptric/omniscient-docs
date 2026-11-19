@@ -1,0 +1,149 @@
+---
+title: "Lists"
+description: "Read process lists and add, change or remove their entries with GET /lists and the /lists/:id/entries endpoints of the Omniscient API."
+sidebar:
+  label: "Lists"
+---
+
+import { Aside, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+A process list holds records with fields of its own, such as a hiring list of people with a "Round" field, or a renewal list of companies with a "Risk" field. Each record can be in a list once. The entry's fields belong to the list, not to the record.
+
+<Aside type="note">
+Lists are kept for tools that already use them through the API. The app has no Lists page.
+</Aside>
+
+## GET /lists
+
+Lists every process list with its entry fields, by name.
+
+**Scope:** `read`
+
+```bash
+curl https://app.tryomniscient.com/api/v1/lists \
+  -H "Authorization: Bearer omn_your_key"
+```
+
+`200 OK`
+
+```json
+{
+  "data": [
+    {
+      "id": "2a3b4c5d-6e7f-4a8b-9c0d-1e2f3a4b5c6d",
+      "name": "Renewals 2027",
+      "object": "company",
+      "layout": "table",
+      "created_at": "2026-10-11T12:00:00+00:00",
+      "entry_fields": [
+        { "key": "risk", "label": "Risk", "type": "select", "options": ["Low", "Medium", "High"], "required": false },
+        { "key": "renewal_date", "label": "Renewal date", "type": "date", "options": null, "required": false }
+      ]
+    }
+  ]
+}
+```
+
+`object` is `company`, `person`, `deal` or a custom object's key.
+
+## GET /lists/:id/entries
+
+Lists the entries of one list, newest first.
+
+**Scope:** `read`
+
+| Parameter | Type | What it does |
+| --- | --- | --- |
+| `record_id` | string | Only this record's entry |
+| `limit` | number | 1 to 100, default 50 |
+| `offset` | number | Rows to skip, default 0 |
+
+```bash
+curl https://app.tryomniscient.com/api/v1/lists/2a3b4c5d-6e7f-4a8b-9c0d-1e2f3a4b5c6d/entries \
+  -H "Authorization: Bearer omn_your_key"
+```
+
+`200 OK`
+
+```json
+{
+  "data": [
+    {
+      "id": "8e9f0a1b-2c3d-4e5f-8a6b-7c8d9e0f1a2b",
+      "record_type": "company",
+      "record_id": "7c8d9e0f-1a2b-4c3d-8e4f-5a6b7c8d9e0f",
+      "fields": { "risk": "Low", "renewal_date": "2027-03-01" },
+      "created_at": "2026-11-01T10:00:00+00:00",
+      "updated_at": "2026-11-15T10:00:00+00:00"
+    }
+  ],
+  "limit": 50,
+  "offset": 0
+}
+```
+
+## POST /lists/:id/entries
+
+Adds a record to the list.
+
+**Scope:** `write`
+
+| Field | Type | Required | What it does |
+| --- | --- | --- | --- |
+| `record_id` | string | Yes | The record to add |
+| `fields` | object | No | Entry field values by key |
+
+```bash
+curl -X POST https://app.tryomniscient.com/api/v1/lists/2a3b4c5d-6e7f-4a8b-9c0d-1e2f3a4b5c6d/entries \
+  -H "Authorization: Bearer omn_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"record_id": "7c8d9e0f-1a2b-4c3d-8e4f-5a6b7c8d9e0f", "fields": {"risk": "Medium"}}'
+```
+
+`201 Created` with the entry. If the record is already in the list, you get `200 OK` with the entry as it was, and the fields you sent are not applied. Use `PATCH` to change them.
+
+## PATCH /lists/:id/entries
+
+Changes an entry's fields. Send `null` to clear a field.
+
+**Scope:** `write`
+
+```bash
+curl -X PATCH https://app.tryomniscient.com/api/v1/lists/2a3b4c5d-6e7f-4a8b-9c0d-1e2f3a4b5c6d/entries \
+  -H "Authorization: Bearer omn_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"record_id": "7c8d9e0f-1a2b-4c3d-8e4f-5a6b7c8d9e0f", "fields": {"risk": "High", "renewal_date": null}}'
+```
+
+`200 OK` with the entry as it is now.
+
+## DELETE /lists/:id/entries
+
+Takes a record out of the list.
+
+**Scope:** `write`
+
+```bash
+curl -X DELETE "https://app.tryomniscient.com/api/v1/lists/2a3b4c5d-6e7f-4a8b-9c0d-1e2f3a4b5c6d/entries?record_id=7c8d9e0f-1a2b-4c3d-8e4f-5a6b7c8d9e0f" \
+  -H "Authorization: Bearer omn_your_key"
+```
+
+`200 OK` with `{"removed": true}`. The record itself stays.
+
+## Errors
+
+| Status | `code` | `message` |
+| --- | --- | --- |
+| 400 | `bad_request` | `record_id is required.` |
+| 400 | `bad_request` | `fields must be an object.` |
+| 400 | `bad_request` | `risc isn't a field on this list. GET /v1/lists shows them.` |
+| 400 | `bad_request` | `score is worked out and can't be set.` |
+| 404 | `not_found` | `No list with that id. GET /v1/lists lists them.` |
+| 404 | `not_found` | `That record isn't in this list.` |
+
+## Related
+
+<CardGrid>
+  <LinkCard title="Custom objects" href="/api-reference/custom-objects/" description="Records of your own types." />
+  <LinkCard title="Relationships" href="/api-reference/relationships/" description="Link two records." />
+</CardGrid>

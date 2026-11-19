@@ -1,0 +1,156 @@
+---
+title: "Authentication"
+description: "How to sign Omniscient API calls: API keys made in Settings, the Connect button that Claritia and Arrowsterr use, and OAuth for MCP clients."
+sidebar:
+  label: "Authentication"
+---
+
+import { Aside, CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
+
+Every call to the API carries a key. There are three ways to get one, and all three end in the same kind of key:
+
+| Way | Who uses it | How the key is made |
+| --- | --- | --- |
+| API key | Your own scripts and servers | An owner or admin makes it in **Settings** |
+| Connect button | Claritia and Arrowsterr | An owner or admin clicks **Allow** on the approve page |
+| OAuth | Claude, ChatGPT, Cursor and other MCP clients | An owner or admin clicks **Allow** on the approve page |
+
+## API keys
+
+<Steps>
+
+1. Go to **Settings**, then **Integrations**, and open **Developers** at the bottom.
+1. Under **API keys**, click **New key**.
+1. Type a name, such as "Data warehouse sync", and click **Make key**.
+1. Copy the key. The dialog says "Copy your key now. It won't be shown again."
+
+</Steps>
+
+Only owners and admins can make and revoke keys. Members see the message "Only owners and admins can manage the API."
+
+A key looks like `omn_` followed by 40 characters. Omniscient stores only a SHA-256 fingerprint of it, so nobody can show it to you again. If you lose a key, revoke it and make a new one.
+
+Keys made in **Settings** can read and write. Each key acts as the person who made it: notes it adds are written by that person. If that person leaves the workspace, `POST /notes` fails with `the key's maker left the workspace; make a new key`.
+
+### Send the key
+
+```bash
+curl https://app.tryomniscient.com/api/v1/me \
+  -H "Authorization: Bearer omn_your_key"
+```
+
+The word `Bearer` is optional and its case doesn't matter, but the header must be `Authorization`.
+
+### Revoke a key
+
+Click **Revoke** next to the key in **Settings**, then **Integrations**, then **Developers**. Omniscient asks "Revoke …?" and warns that anything using it stops working. Revoking a key also deletes every webhook that key made.
+
+<Aside type="caution">
+Keep keys on a server. Never put one in a web page, a mobile app, a browser extension or a shared document.
+</Aside>
+
+## The Connect button
+
+Claritia and Arrowsterr connect to Omniscient with one click. Nobody copies a key. This is how it works behind the button, if you build on those apps:
+
+<Steps>
+
+1. The app sends the person to `https://app.tryomniscient.com/connect?app=claritia&redirect_uri=<callback>&state=<random>`. The `app` is `claritia` or `arrowsterr`. The callback must be `https` on that app's own domain.
+1. The person sees an Allow page with both logos and what the app can do. An owner or admin clicks **Allow**.
+1. Omniscient sends them back to `redirect_uri?code=…&state=…`. The app checks that `state` matches.
+1. Within 10 minutes, the app's server trades the code for a key with `POST /connect/token`. A code works once.
+1. The app registers its webhooks with that key, using `POST /webhooks`.
+
+</Steps>
+
+Connecting the same app again revokes its old key and deletes its old webhooks. An owner or admin disconnects the app in **Settings**, then **Integrations**, which removes the key and its webhooks.
+
+### POST /connect/token
+
+```http
+POST https://app.tryomniscient.com/api/v1/connect/token
+```
+
+This call takes no key. The code is the proof.
+
+| Field | Type | Required | What it is |
+| --- | --- | --- | --- |
+| `code` | string | Yes | The code from the callback |
+| `redirect_uri` | string | Yes | The same callback the code was made for |
+
+```bash
+curl -X POST https://app.tryomniscient.com/api/v1/connect/token \
+  -H "Content-Type: application/json" \
+  -d '{"code": "c0de_from_callback", "redirect_uri": "https://app.tryclaritia.com/omniscient/callback"}'
+```
+
+`200 OK`
+
+```json
+{
+  "key": "omn_8Jd2kQ7vXr1mN4pL0sT6yH3wB9cF5gZaE2uR7iO1",
+  "workspace": "Northwind",
+  "workspace_id": "5d6c7b8a-1e2f-4a3b-9c8d-7e6f5a4b3c2d",
+  "scopes": ["read", "write"]
+}
+```
+
+| Status | `code` | `message` |
+| --- | --- | --- |
+| 400 | `bad_request` | `Send {code, redirect_uri}.` |
+| 400 | `invalid_code` | `That code is wrong, used or expired. Connect again.` |
+| 500 | `server_error` | A database message |
+| 503 | `not_configured` | `The API isn't set up on this server yet.` |
+
+The Allow page itself can show these errors: "This connection link isn't valid. Start again from the other app.", "That app address isn't allowed." and "Only owners and admins can connect apps."
+
+## OAuth for MCP clients
+
+AI apps connect to the [MCP server](/developers/mcp/) with OAuth 2.1. Most apps do all of this on their own when you paste the server address. The steps are here for people who build an MCP client.
+
+| Step | Address |
+| --- | --- |
+| Find the sign-in details | `/.well-known/oauth-protected-resource` and `/.well-known/oauth-authorization-server` |
+| Register the app | `POST /api/oauth/register` with `client_name` and `redirect_uris` |
+| Send the person to approve | `/connect`, the same Allow page Claritia uses |
+| Trade the code | `POST /api/oauth/token` with `grant_type=authorization_code` |
+| Refresh | `POST /api/oauth/token` with `grant_type=refresh_token` |
+
+Rules:
+
+- Only public clients with PKCE (S256). Codes last 10 minutes and work once.
+- Return addresses can be `https` addresses, a `localhost` port or an app scheme. Up to 10 per app.
+- The access token is a workspace API key named after the app, like "Claude (MCP)". It shows under **API keys** in **Developers**, and **Revoke** there disconnects the app.
+- The refresh token starts with `omr_`. Refreshing gives a new access token and a new refresh token. The old pair stops working.
+- The token reply carries `access_token`, `token_type` (`Bearer`), `refresh_token` and `scope` (`mcp`).
+
+OAuth errors use the standard shape, `{"error": "...", "error_description": "..."}`:
+
+| `error` | `error_description` |
+| --- | --- |
+| `invalid_redirect_uri` | `Send redirect_uris: https addresses, a localhost port, or an app scheme.` |
+| `invalid_grant` | `The code is wrong, used or expired. Connect again.` |
+| `invalid_grant` | `The code was already used.` |
+| `invalid_grant` | `The code was issued to a different app or return address.` |
+| `invalid_grant` | `The code_verifier doesn't match.` |
+| `invalid_grant` | `The refresh token belongs to a different app.` |
+| `unsupported_grant_type` | `Use authorization_code or refresh_token.` |
+
+On the approve page, a person who isn't an owner or admin sees "Only owners and admins can connect apps." An app that doesn't use PKCE gets "The app must use PKCE with S256."
+
+## Key errors on every endpoint
+
+| Status | `code` | `message` |
+| --- | --- | --- |
+| 401 | `unauthorized` | `Send your API key as: Authorization: Bearer omn_…` |
+| 401 | `unauthorized` | `That key doesn't work. It may have been revoked.` |
+| 403 | `forbidden` | `This key can't write.` |
+| 429 | `rate_limited` | `Up to 600 requests a minute per key.` |
+| 503 | `not_configured` | `The API isn't set up on this server yet.` |
+
+## Next steps
+
+<CardGrid>
+  <LinkCard title="GET /me" href="/api-reference/me/" description="Check that a key works." />
+  <LinkCard title="MCP tools" href="/api-reference/mcp-tools/" description="What an AI app can do once connected." />
+</CardGrid>

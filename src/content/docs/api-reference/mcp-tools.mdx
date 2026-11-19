@@ -1,0 +1,269 @@
+---
+title: "MCP tools"
+description: "Every tool the Omniscient MCP server offers to Claude, ChatGPT, Cursor and other AI apps: its inputs, what it returns, an example and its errors."
+sidebar:
+  label: "MCP tools"
+---
+
+import { Aside, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+The MCP server lets an AI app search, read and change your CRM. Most people connect it with one click and never see the details on this page. It is for people who build an MCP client or want to know exactly what an app can do.
+
+```http
+POST https://app.tryomniscient.com/api/mcp
+```
+
+## How the server works
+
+- It speaks JSON-RPC 2.0 over plain HTTP. Send one message, or a batch of up to 20, in a `POST`. The reply comes back on the same request. There is no event stream, so `GET` and `DELETE` answer `405`.
+- Protocol versions: `2025-11-25`, `2025-06-18`, `2025-03-26` and `2024-11-05`. If you ask for another, you get the newest.
+- Sign in with OAuth (see [Authentication](/api-reference/authentication/#oauth-for-mcp-clients)) or send an API key as a Bearer token. Without one you get `401` with a `WWW-Authenticate` header that points to the sign-in details.
+- Every tool works inside the workspace you connected. The limit of 600 calls a minute per key applies.
+- The server has tools only. `prompts/list`, `resources/list` and `resources/templates/list` return empty lists.
+
+When an app starts, the server tells it how to use the tools, including this rule: the tools that change data "change the workspace for the whole team, so confirm with the person first."
+
+### Call a tool
+
+```bash
+curl -X POST https://app.tryomniscient.com/api/mcp \
+  -H "Authorization: Bearer omn_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "search", "arguments": {"query": "lumen"}}}'
+```
+
+Each result has a `content` text block for the model to read and the same data as `structuredContent`. A mistake in the input comes back as a result with `isError: true` and a sentence the model can act on, like `Search for at least 2 characters.` A failure on Omniscient's side says `Something went wrong on Omniscient's side. Try again in a moment.`
+
+## Tools at a glance
+
+| Tool | Title | Changes data |
+| --- | --- | --- |
+| [`search`](#search) | Search the CRM | No |
+| [`list_records`](#list_records) | List records | No |
+| [`get_record`](#get_record) | Read a record | No |
+| [`describe_fields`](#describe_fields) | Fields and stages | No |
+| [`upsert_company`](#upsert_company) | Add or update a company | Yes |
+| [`upsert_person`](#upsert_person) | Add or update a person | Yes |
+| [`create_opportunity`](#create_opportunity) | Open an opportunity | Yes |
+| [`update_record`](#update_record) | Update a record | Yes |
+| [`add_note`](#add_note) | Add a note | Yes |
+
+Tools that change data need a key with `write`. Without it, they answer `This connection can only read. Connect again with write access.`
+
+Records come back in the same shapes as the REST API: [contacts](/api-reference/contacts/#the-contact-object), [accounts](/api-reference/accounts/#the-account-object) and [opportunities](/api-reference/opportunities/#the-opportunity-object). Opportunities also carry `next_step`.
+
+## search
+
+Finds companies by name or domain, people by name or email, and opportunities by name. Use it first to get ids.
+
+| Input | Type | Required | What it does |
+| --- | --- | --- | --- |
+| `query` | string | Yes | A name, domain or email, or part of one. At least 2 characters. |
+| `types` | array | No | Any of `company`, `person`, `opportunity`. All three when left out. |
+| `limit` | number | No | Up to this many of each kind, 1 to 25. Default 10. |
+
+```json
+{ "name": "search", "arguments": { "query": "lumen", "types": ["company", "opportunity"] } }
+```
+
+Returns `{ "companies": [...], "opportunities": [...] }`, newest first, with one key for each kind you asked for. With no matches, the text starts with `No matches for "lumen".`
+
+## list_records
+
+Lists companies, people or opportunities, newest first.
+
+| Input | Type | Required | What it does |
+| --- | --- | --- | --- |
+| `type` | string | Yes | `company`, `person` or `opportunity` |
+| `company_id` | string | No | Only people or opportunities at this company |
+| `stage` | string | No | Only opportunities at this stage, by key or name |
+| `limit` | number | No | 1 to 100, default 25 |
+| `offset` | number | No | Skip this many, to page through |
+
+```json
+{ "name": "list_records", "arguments": { "type": "opportunity", "stage": "Proposal", "limit": 10 } }
+```
+
+Returns `{ "opportunities": [...], "limit": 10, "offset": 0, "more": true }`. `more` is `true` when there may be another page.
+
+Errors: `company_id filters people or opportunities.`, `stage filters opportunities.` and `No stage with that name. Call describe_fields with type opportunity to see the stages.`
+
+## get_record
+
+Reads one record in full, with its latest 10 notes.
+
+| Input | Type | Required | What it does |
+| --- | --- | --- | --- |
+| `type` | string | Yes | `company`, `person` or `opportunity` |
+| `id` | string | Yes | The record's id, from `search` or `list_records` |
+
+```json
+{ "name": "get_record", "arguments": { "type": "company", "id": "7c8d9e0f-1a2b-4c3d-8e4f-5a6b7c8d9e0f" } }
+```
+
+A company comes with up to 50 of its `people` and 50 `opportunities`. A person or opportunity comes with its `company`. Each note has `id`, `body` (up to 4,000 characters) and `created_at`.
+
+```json
+{
+  "company": { "id": "7c8d9e0f-…", "name": "Lumen Health", "domain": "lumenhealth.example.com", "fields": {} },
+  "notes": [ { "id": "c1d2e3f4-…", "body": "Renewal call went well.", "created_at": "2026-11-15T16:00:00+00:00" } ],
+  "people": [ { "id": "a3b1c2d4-…", "name": "Maya Patel", "email": "maya@lumenhealth.example.com" } ],
+  "opportunities": [ { "id": "0b6f3c52-…", "name": "Lumen Health expansion", "stage_name": "Proposal", "next_step": "Send the security pack" } ]
+}
+```
+
+Errors: `That isn't a company id. Find it with search first.` and `No company with that id in this workspace.`
+
+## describe_fields
+
+Tells the app what your workspace calls this object, like "Clients" or "Jobs", and lists its fields with their types and choices. For opportunities it also lists every pipeline and its stages. Apps should call it before `update_record`.
+
+| Input | Type | Required | What it does |
+| --- | --- | --- | --- |
+| `type` | string | Yes | `company`, `person` or `opportunity` |
+
+```json
+{ "name": "describe_fields", "arguments": { "type": "opportunity" } }
+```
+
+```json
+{
+  "name": "Opportunities",
+  "fields": [
+    { "key": "name", "label": "Name", "type": "text", "editable": true },
+    { "key": "stage", "label": "Stage", "type": "stage", "editable": true },
+    { "key": "amount", "label": "Amount", "type": "number", "editable": true },
+    { "key": "close_date", "label": "Close date", "type": "date", "editable": true },
+    { "key": "next_step", "label": "Next step", "type": "text", "editable": true },
+    { "key": "source", "label": "Source", "type": "select", "options": ["Referral", "Inbound", "Outbound"], "editable": true }
+  ],
+  "pipelines": [
+    { "id": "e1d2c3b4-…", "name": "New business", "stages": [ { "key": "discovery", "name": "Discovery", "kind": "open" }, { "key": "won", "name": "Won", "kind": "won" } ] }
+  ]
+}
+```
+
+Built-in fields come first: `name` for companies; `name` and `lifecycle` for people; `name`, `stage`, `amount`, `close_date`, `probability`, `next_step` and `lost_reason` for opportunities. Formula and rollup fields show `"editable": false`.
+
+## upsert_company
+
+Adds a company by its domain, or fills in the one that already has it. Blank fields are left as they are.
+
+| Input | Type | Required | What it does |
+| --- | --- | --- | --- |
+| `domain` | string | Yes | The website, like `harborbank.example.com` |
+| `name` | string | No | Used when the company is new |
+| `fields` | object | No | Field values by key, from `describe_fields` |
+
+```json
+{ "name": "upsert_company", "arguments": { "domain": "harborbank.example.com", "name": "Harbor Bank" } }
+```
+
+Works like [POST /accounts](/api-reference/accounts/#post-accounts). Safe to repeat. Error: `domain is required.`
+
+## upsert_person
+
+Adds a person by email, or fills in the one that already has it. Naming a company or domain links them to it, and adds the company when it's new.
+
+| Input | Type | Required | What it does |
+| --- | --- | --- | --- |
+| `email` | string | Yes | Their email |
+| `name` | string | No | Their name |
+| `title` | string | No | Job title |
+| `phone` | string | No | Phone |
+| `company` | string | No | Company name |
+| `domain` | string | No | Company website |
+| `fields` | object | No | Field values by key |
+
+```json
+{ "name": "upsert_person", "arguments": { "email": "lena@harborbank.example.com", "name": "Lena Vogel", "title": "CFO" } }
+```
+
+Works like [POST /contacts](/api-reference/contacts/#post-contacts). Error: `A valid email is required.`
+
+## create_opportunity
+
+Opens an opportunity at a company. Without a stage, it starts in the pipeline's first open stage.
+
+| Input | Type | Required | What it does |
+| --- | --- | --- | --- |
+| `name` | string | Yes | Its name |
+| `company_id` | string | No | The company's id |
+| `domain` | string | No | Instead: the company's website. Adds the company when it's new. |
+| `pipeline` | string | No | Pipeline name or id. The default pipeline when left out. |
+| `stage` | string | No | Stage key or name |
+| `amount` | number | No | Its value |
+| `close_date` | string | No | Like `2026-03-31` |
+| `owner_email` | string | No | A teammate's email |
+
+```json
+{ "name": "create_opportunity", "arguments": { "name": "Harbor Bank pilot", "domain": "harborbank.example.com", "amount": 12000 } }
+```
+
+This tool runs once and is never retried on its own, so a timeout can't open two. Errors: `name is required.` and the same messages as [POST /opportunities](/api-reference/opportunities/#errors).
+
+## update_record
+
+Changes fields on a company, person or opportunity: an opportunity's stage, amount, close date or next step, or any custom field. Set a field to `null` to clear it.
+
+| Input | Type | Required | What it does |
+| --- | --- | --- | --- |
+| `type` | string | Yes | `company`, `person` or `opportunity` |
+| `id` | string | Yes | The record's id |
+| `changes` | object | Yes | Field keys and new values, like `{"stage": "Proposal", "amount": 12000}`. Up to 20. |
+
+```json
+{ "name": "update_record", "arguments": { "type": "opportunity", "id": "0b6f3c52-…", "changes": { "stage": "Negotiation", "next_step": "Legal review on Friday" } } }
+```
+
+Returns the record as it is now and `changed`, the keys that were saved, with the text `Changed stage, next_step.`
+
+Each change is checked before anything is written:
+
+| Check | Error |
+| --- | --- |
+| The key must be a field | `budgett isn't a field on opportunities. Call describe_fields to see them.` |
+| Formula and rollup fields can't be set | `Margin is worked out from other fields and can't be set.` |
+| A choice must be one of the field's options | `Source must be one of: Referral, Inbound, Outbound.` |
+| A multi-select takes a list or a comma-separated string of its options | `Tags takes values from: Priority, Partner, Renewal.` |
+| People, emails, links, phones and files fields hold lists | `Owners holds a list and can't be set from an app.` |
+| Other fields take one value | `City takes a single value.` |
+| A stage must exist in the record's pipeline | `Stage must be one of: Discovery, Proposal, Negotiation, Won, Lost.` |
+| Numbers, currency and percents | `Amount must be a number.` |
+| Dates | `Close date must be a date like 2026-03-31.` |
+| A checkbox takes true or false | `Signed must be true or false.` |
+| A name can't be blank | `Name can't be blank.` |
+| At least one, at most 20 changes | `Send at least one field in changes.` and `Change up to 20 fields at a time.` |
+
+Stage names and choices match without regard to case. Numbers can be sent as `12000` or `"$12,000"`. Changes are written one by one through the same path as an edit in the app, marked as made by AI. They show in field history, and workflows see them. If one fails partway, the error says what was saved: `Saved stage; amount failed: …`
+
+## add_note
+
+Adds a note to a company, person or opportunity, written as the person who connected the app.
+
+| Input | Type | Required | What it does |
+| --- | --- | --- | --- |
+| `type` | string | Yes | `company`, `person` or `opportunity` |
+| `id` | string | Yes | The record's id |
+| `body` | string | Yes | The note, in plain markdown |
+
+```json
+{ "name": "add_note", "arguments": { "type": "opportunity", "id": "0b6f3c52-…", "body": "Call recap: they want SSO before signing." } }
+```
+
+Returns `{ "note": { "id": "…" } }` with the text `Added the note.` Runs once, so a timeout can't add two.
+
+## What the server never does
+
+The MCP server has no tools for LinkedIn, contracts, emails or meetings. It can't delete anything.
+
+<Aside type="tip">
+In your AI app, ask in plain words: "Find Lumen Health and move its expansion opportunity to Negotiation." The app calls `search`, then `describe_fields`, then `update_record`, and should ask you before the last step.
+</Aside>
+
+## Related
+
+<CardGrid>
+  <LinkCard title="MCP server" href="/developers/mcp/" description="Connect Claude, ChatGPT or Cursor." />
+  <LinkCard title="Use Omniscient from Claude" href="/recipes/use-omniscient-from-claude/" description="A step-by-step recipe." />
+</CardGrid>

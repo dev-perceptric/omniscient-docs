@@ -1,0 +1,156 @@
+---
+title: "Custom objects"
+description: "Read your workspace's custom objects and create, read, list and change their records with GET /objects and the /objects/:key/records endpoints."
+sidebar:
+  label: "Custom objects"
+---
+
+import { Aside, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Custom objects are the record types your team adds in the [data model](/crm/data-model/), like Projects, Partners or Properties. Each one has a key that starts with `o_`, like `o_projects`. Use the key in the paths below.
+
+## The record object
+
+```json
+{
+  "id": "6d7e8f90-a1b2-4c3d-8e4f-5a6b7c8d9e0f",
+  "object": "o_projects",
+  "name": "Lumen Health rollout",
+  "fields": { "status": "In progress", "budget": 30000, "go_live": "2027-02-01" },
+  "owner_id": "f0e1d2c3-b4a5-4f6e-8d7c-9b0a1f2e3d4c",
+  "created_at": "2026-11-03T08:30:00+00:00",
+  "updated_at": "2026-11-18T09:10:00+00:00"
+}
+```
+
+| Field | Type | What it is |
+| --- | --- | --- |
+| `id` | string | The record's id |
+| `object` | string | The object's key |
+| `name` | string | The record's name |
+| `fields` | object | Field values by key |
+| `owner_id` | string or null | The owner's user id |
+| `created_at` | string | When it was made |
+| `updated_at` | string | When it last changed |
+
+## GET /objects
+
+Lists your custom objects with their fields. Relationship fields are left out here. Read them with [GET /relationships](/api-reference/relationships/).
+
+**Scope:** `read`
+
+```bash
+curl https://app.tryomniscient.com/api/v1/objects \
+  -H "Authorization: Bearer omn_your_key"
+```
+
+`200 OK`
+
+```json
+{
+  "data": [
+    {
+      "key": "o_projects",
+      "singular": "Project",
+      "plural": "Projects",
+      "created_at": "2026-10-28T16:00:00+00:00",
+      "fields": [
+        { "key": "status", "label": "Status", "type": "select", "options": ["Planned", "In progress", "Live"] },
+        { "key": "budget", "label": "Budget", "type": "currency", "options": null },
+        { "key": "budget_left", "label": "Budget left", "type": "formula", "options": null, "read_only": true }
+      ]
+    }
+  ]
+}
+```
+
+Formula and rollup fields have `"read_only": true`. You can read them but not set them.
+
+## GET /objects/:key/records
+
+Lists records of one object, newest first.
+
+**Scope:** `read`
+
+| Parameter | Type | What it does |
+| --- | --- | --- |
+| `q` | string | Only records whose name contains this text. Case doesn't matter. |
+| `limit` | number | 1 to 100, default 50 |
+| `offset` | number | Rows to skip, default 0 |
+
+```bash
+curl "https://app.tryomniscient.com/api/v1/objects/o_projects/records?q=lumen" \
+  -H "Authorization: Bearer omn_your_key"
+```
+
+`200 OK` with `{"data": [...], "limit": 50, "offset": 0}`.
+
+## POST /objects/:key/records
+
+Makes a record.
+
+**Scope:** `write`
+
+| Field | Type | Required | What it does |
+| --- | --- | --- | --- |
+| `name` | string | Yes | The record's name |
+| `fields` | object | No | Field values by key |
+| `owner_id` | string | No | A team member's user id. Anyone else is left blank. |
+
+```bash
+curl -X POST https://app.tryomniscient.com/api/v1/objects/o_projects/records \
+  -H "Authorization: Bearer omn_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Brightline onboarding", "fields": {"status": "Planned", "budget": 8000}}'
+```
+
+`201 Created` with the record object. Workflows that start on a new record run, and the `record.created` webhook goes out.
+
+## GET /objects/:key/records/:id
+
+Reads one record.
+
+```bash
+curl https://app.tryomniscient.com/api/v1/objects/o_projects/records/6d7e8f90-a1b2-4c3d-8e4f-5a6b7c8d9e0f \
+  -H "Authorization: Bearer omn_your_key"
+```
+
+`200 OK` with the record object.
+
+## PATCH /objects/:key/records/:id
+
+Changes a record. Send only what changes: `name`, `owner_id`, `fields` or any mix. Each value is written like an edit in the app, so it shows in the field's history and workflows see it.
+
+**Scope:** `write`
+
+```bash
+curl -X PATCH https://app.tryomniscient.com/api/v1/objects/o_projects/records/6d7e8f90-a1b2-4c3d-8e4f-5a6b7c8d9e0f \
+  -H "Authorization: Bearer omn_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"fields": {"status": "Live"}, "owner_id": null}'
+```
+
+`200 OK` with the record as it is now. Send `"owner_id": null` to clear the owner.
+
+<Aside type="caution">
+Unlike contacts and accounts, `PATCH` overwrites values that are already set. A field key the object doesn't have is an error: `Unknown field …`.
+</Aside>
+
+## Errors
+
+| Status | `code` | `message` |
+| --- | --- | --- |
+| 400 | `bad_request` | `name is required` |
+| 400 | `bad_request` | `owner_id is not in this workspace` |
+| 400 | `bad_request` | `Unknown field budgett` |
+| 400 | `bad_request` | `Budget left is worked out from other fields and can't be set` |
+| 400 | `bad_request` | `Unknown owner` |
+| 404 | `not_found` | `No object o_projcts. GET /v1/objects lists them.` |
+| 404 | `not_found` | `Record not found.` |
+
+## Related
+
+<CardGrid>
+  <LinkCard title="Custom objects in the app" href="/crm/custom-objects/" description="Add an object and its fields." />
+  <LinkCard title="Relationships" href="/api-reference/relationships/" description="Link records to each other." />
+</CardGrid>

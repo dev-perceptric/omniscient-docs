@@ -1,0 +1,116 @@
+---
+title: "POST /leads"
+description: "Hand a person who is ready to talk to your team: POST /leads finds or makes the person, opens an opportunity, picks an owner and emails them."
+sidebar:
+  label: "POST /leads"
+---
+
+import { Aside, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Use this call when another tool has found someone who is ready to talk to sales, such as a person who booked a demo or asked for pricing. In one call, Omniscient:
+
+1. Finds the person by email, or makes them, with their company.
+1. Opens an opportunity linked to them. If they already have an open opportunity from an earlier handoff or form, it returns that one.
+1. Picks an owner with the workspace's **Assignment** rule, unless you name one.
+1. Emails the owner, with the subject "New: *name* from *source*".
+1. Saves your `note` on the opportunity.
+
+```http
+POST https://app.tryomniscient.com/api/v1/leads
+```
+
+**Scope:** `write`
+
+## Body
+
+| Field | Type | Required | What it does |
+| --- | --- | --- | --- |
+| `email` | string | Yes | Finds or makes the person |
+| `name` | string | No | Their full name |
+| `company` | string | No | Their company's name |
+| `title` | string | No | Their job title |
+| `phone` | string | No | Their phone |
+| `domain` | string | No | Their company's website. Left out, Omniscient uses the email's domain. |
+| `source` | string | No | Where they came from, like `Claritia demo form`. Up to 80 characters. Default `API`. |
+| `reason` | string | No | Why they're ready, like "Asked for pricing". Up to 200 characters. Shown in the owner's email. |
+| `note` | string | No | A note saved on the opportunity, up to 20,000 characters |
+| `fields` | object | No | Person field values by key |
+| `owner_email` | string | No | A team member's email. Skips the assignment rule. |
+
+## Request
+
+```bash
+curl -X POST https://app.tryomniscient.com/api/v1/leads \
+  -H "Authorization: Bearer omn_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "ana@cobalt.example.com",
+    "name": "Ana Ruiz",
+    "company": "Cobalt Studio",
+    "title": "Head of Growth",
+    "source": "Pricing page form",
+    "reason": "Asked for a demo for 12 people",
+    "note": "Uses HubSpot today. Wants to move this quarter."
+  }'
+```
+
+## Response
+
+`201 Created` when a new opportunity was opened. `200 OK` when the person already had an open one.
+
+```json
+{
+  "created": true,
+  "deal_id": "3e4f5a6b-7c8d-4e9f-8a0b-1c2d3e4f5a6b",
+  "contact_id": "9a8b7c6d-5e4f-4a3b-8c2d-1e0f9a8b7c6d",
+  "owner_id": "f0e1d2c3-b4a5-4f6e-8d7c-9b0a1f2e3d4c"
+}
+```
+
+| Field | Type | What it is |
+| --- | --- | --- |
+| `created` | boolean | `true` when a new opportunity was opened |
+| `deal_id` | string | The opportunity's id. Read it with [GET /opportunities/:id](/api-reference/opportunities/). |
+| `contact_id` | string | The person's id |
+| `owner_id` | string or null | The owner. `null` when assignment is **Off** and no `owner_email` was sent. |
+
+## How the owner is picked
+
+The rule lives in **Settings**, then **Capture**, under **Assignment**. Owners and admins set it.
+
+| Setting | What happens |
+| --- | --- |
+| **Off** | No owner. The opportunity is left unassigned. |
+| **Take turns** | The next person in the list, one after another |
+| **Fewest open opportunities** | The person in the list with the fewest open opportunities |
+| **Account owner first** | When on, the person who owns the company's latest opportunity gets it, if they are in the list |
+
+People who left the workspace are skipped. An `owner_email` that isn't a team member is ignored and the rule picks instead.
+
+## The new opportunity
+
+- It opens in the default pipeline, at the first open stage.
+- It is named after the company, or after the person when there's no company.
+- The person is linked to it as a contact.
+- Only one open handoff per person: a second call while the first opportunity is still open returns it with `created: false`, and no new email goes out.
+
+<Aside type="tip">
+For forms on your website, you don't need a server. Use a [capture address](/api-reference/capture/): it does the same thing from a plain HTML form or a webhook.
+</Aside>
+
+## Errors
+
+| Status | `code` | `message` |
+| --- | --- | --- |
+| 400 | `bad_request` | `email is required and must be valid` |
+| 400 | `bad_request` | `Send a JSON object.` or `That isn't valid JSON.` |
+| 401 | `unauthorized` | The key is missing or revoked |
+| 403 | `forbidden` | `This key can't write.` |
+| 413 | `too_large` | `Bodies are limited to 100 KB.` |
+
+## Related
+
+<CardGrid>
+  <LinkCard title="Capture addresses" href="/api-reference/capture/" description="Forms and webhooks that do the same handoff." />
+  <LinkCard title="Capture settings" href="/settings/capture/" description="Set the assignment rule." />
+</CardGrid>

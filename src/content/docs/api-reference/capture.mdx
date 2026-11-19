@@ -1,0 +1,110 @@
+---
+title: "Capture addresses"
+description: "Send leads from your own website forms, Typeform, Webflow, Zapier or any tool to Omniscient with the capture addresses made in Settings, Capture."
+sidebar:
+  label: "Capture addresses"
+---
+
+import { Aside, CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
+
+A capture address takes a form post or a webhook and turns it into a person, a company and an opportunity, with an owner from your **Assignment** rule. It needs no API key, so a plain HTML form on your website can post to it.
+
+You make capture addresses in **Settings**, then **Capture**. There are two kinds:
+
+| Kind | Made with | Accepts |
+| --- | --- | --- |
+| Form | **New form** | The fields you set on the form. Has a hosted page, a link and embed code. |
+| Webhook | **New webhook** | Any JSON from tools like Typeform, Webflow or Zapier |
+
+```http
+POST https://app.tryomniscient.com/api/inbound/<key>
+```
+
+The key is 64 letters and numbers. Click **Copy address** on a webhook, or **Copy link** on a form, to get it.
+
+## Send JSON
+
+```bash
+curl -X POST https://app.tryomniscient.com/api/inbound/9c1e0f…d42a \
+  -H "Content-Type: application/json" \
+  -d '{"email": "ana@cobalt.example.com", "name": "Ana Ruiz", "company": "Cobalt Studio", "title": "Head of Growth", "message": "Looking for help with AI search"}'
+```
+
+`200 OK`
+
+```json
+{ "ok": true, "thanks": "Thanks. We'll be in touch soon.", "redirect": null }
+```
+
+Click **Copy example** on a webhook to get a sample like this with your address filled in.
+
+## Send an HTML form
+
+A form with `application/x-www-form-urlencoded` or `multipart/form-data` gets a redirect, not JSON. It goes to the form's **Page after sending** when set, or to the hosted thank-you page.
+
+```html
+<form action="https://app.tryomniscient.com/api/inbound/9c1e0f…d42a" method="post">
+  <input name="email" type="email" required>
+  <input name="name">
+  <input name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+  <button>Send</button>
+</form>
+```
+
+The hidden `_gotcha` field catches bots. A post that fills it is thrown away but still gets a success answer.
+
+## Field names it understands
+
+Omniscient reads common names from most tools, so you rarely need to map fields.
+
+| It reads | As |
+| --- | --- |
+| `email`, `email_address`, `e_mail`, `work_email` | Email |
+| `name`, `full_name`, `your_name`, or `first_name` with `last_name` | Name |
+| `job_title`, `jobtitle`, `role`, `position` | Title |
+| `company_name`, `organization`, `business` | Company |
+| `phone_number`, `mobile`, `telephone` | Phone |
+| `comments`, `notes`, `details`, `how_can_we_help` | Message |
+
+- Values nested under `data`, `fields`, `contact`, `lead`, `submission`, `answers` or `values` are read too, two levels deep.
+- Lists of `{key, value}` or `{label, value}` pairs, as Typeform and Tally send, are read.
+- Up to 60 fields per post. Text is cut at 500 characters, or 5,000 for the message.
+- Any key that matches a person field in your data model is saved on the person. A form saves only the fields it has.
+
+## Where the visitor came from
+
+Send `utm_source`, `utm_medium`, `utm_campaign`, `referrer` and `page` with the post, and Omniscient names the channel on the opportunity: Paid search, Paid social, Email, AI referral, Organic search, Organic social, Referral, Other campaigns or Direct. Without them, it reads the page the post came from.
+
+## What happens
+
+<Steps>
+
+1. Omniscient finds the person by email, or makes them and their company.
+1. If they already have an open opportunity from a form, webhook or the API, it adds to that one. Otherwise it opens a new one in your default pipeline and picks an owner.
+1. The owner gets an email: "New: *name* from *form name*".
+1. The post is counted on the form or webhook in **Settings**, with the time of the last one.
+
+</Steps>
+
+## Limits and errors
+
+| Status | `error` | What it means |
+| --- | --- | --- |
+| 400 | `Add a valid email.` | No email, or it doesn't look like one |
+| 400 | `Work email is required.` | A form field marked **Required** was empty. The message names the field. |
+| 400 | `That submission couldn't be read.` | The body isn't valid JSON or form data |
+| 404 | `This form doesn't exist.` | The key is wrong, deleted or turned off |
+| 413 | `That submission couldn't be read.` | The body is over 50 KB |
+| 429 | `Too many submissions. Try again in a few minutes.` | More than 10 posts from one visitor in 10 minutes |
+| 503 | `Not set up yet.` | Capture isn't set up on this server |
+
+<Aside type="caution">
+Anyone with the address can post to it. If one leaks, click **New address** on the webhook. The old address stops working.
+</Aside>
+
+## Related
+
+<CardGrid>
+  <LinkCard title="Capture settings" href="/settings/capture/" description="Make forms and webhooks, and set the assignment rule." />
+  <LinkCard title="POST /leads" href="/api-reference/leads/" description="The same handoff from your server, with a key." />
+</CardGrid>

@@ -1,0 +1,92 @@
+---
+title: "POST /activities"
+description: "Log marketing activity on a person in Omniscient, like an email opened, a page viewed or a form sent, with POST /activities."
+sidebar:
+  label: "POST /activities"
+---
+
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Logs something a person did in another tool, such as opening a newsletter or viewing your pricing page. It shows in the **Marketing** card on their record, so the team sees it next to their emails and meetings.
+
+```http
+POST https://app.tryomniscient.com/api/v1/activities
+```
+
+**Scope:** `write`
+
+## Body
+
+| Field | Type | Required | What it does |
+| --- | --- | --- | --- |
+| `contact_id` | string | One of these | The person's id |
+| `email` | string | One of these | Instead of `contact_id`. Finds or makes the person, like [POST /contacts](/api-reference/contacts/). |
+| `type` | string | No | One of the types below. Default `other`. |
+| `title` | string | Yes | One line, up to 300 characters, like "Opened: November newsletter" |
+| `body` | string | No | More detail, up to 5,000 characters |
+| `url` | string | No | A link to the page or email, up to 1,000 characters |
+| `occurred_at` | string | No | ISO 8601. Default now. A time more than a day ahead is set to now. |
+| `source` | string | No | The tool's name, up to 40 characters. Default `api`. |
+| `data` | object | No | Anything else you want to keep, under 10,000 characters as JSON |
+
+### Types
+
+| `type` | Use it for |
+| --- | --- |
+| `email_sent` | You sent them a marketing email |
+| `email_opened` | They opened it |
+| `email_clicked` | They clicked a link in it |
+| `email_replied` | They replied |
+| `page_view` | They viewed a page on your site |
+| `form_submitted` | They sent a form |
+| `meeting_booked` | They booked a meeting |
+| `content_viewed` | They read or watched something, like a guide or a video |
+| `other` | Anything else |
+
+## Request
+
+```bash
+curl -X POST https://app.tryomniscient.com/api/v1/activities \
+  -H "Authorization: Bearer omn_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "maya@lumenhealth.example.com",
+    "type": "page_view",
+    "title": "Viewed the pricing page",
+    "url": "https://northwind.example.com/pricing",
+    "occurred_at": "2026-11-18T14:03:00Z",
+    "source": "arrowsterr"
+  }'
+```
+
+## Response
+
+`201 Created`
+
+```json
+{
+  "id": "5b6c7d8e-9f0a-4b1c-8d2e-3f4a5b6c7d8e",
+  "contact_id": "a3b1c2d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d"
+}
+```
+
+The activity is linked to the person's company too.
+
+## Errors
+
+| Status | `code` | `message` |
+| --- | --- | --- |
+| 400 | `bad_request` | `title is required` |
+| 400 | `bad_request` | `occurred_at must be an ISO date and time` |
+| 400 | `bad_request` | `type must be one of email_sent, email_opened, email_clicked, email_replied, page_view, form_submitted, meeting_booked, content_viewed, other` |
+| 400 | `bad_request` | `email is required and must be valid` |
+| 404 | `not_found` | `contact not found` |
+| 401 | `unauthorized` | The key is missing or revoked |
+| 403 | `forbidden` | `This key can't write.` |
+
+## Related
+
+<CardGrid>
+  <LinkCard title="Record pages" href="/crm/record-pages/" description="Where the Marketing card shows." />
+  <LinkCard title="Arrowsterr" href="/integrations/arrowsterr/" description="Logs page views for you." />
+</CardGrid>

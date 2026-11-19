@@ -1,0 +1,96 @@
+---
+title: "Relationships"
+description: "Read relationship fields and link or unlink two records with GET /relationships and POST /relationships in the Omniscient API."
+sidebar:
+  label: "Relationships"
+---
+
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+A relationship field links records of two objects, such as a Project to the Company it's for, or a Partner to many People. Each relationship has two ends. Each end is "one" or "many".
+
+## GET /relationships
+
+Lists every relationship field in the workspace.
+
+**Scope:** `read`
+
+```bash
+curl https://app.tryomniscient.com/api/v1/relationships \
+  -H "Authorization: Bearer omn_your_key"
+```
+
+`200 OK`
+
+```json
+{
+  "data": [
+    {
+      "id": "4c5d6e7f-8a9b-4c0d-9e1f-2a3b4c5d6e7f",
+      "object": "o_projects",
+      "key": "company",
+      "label": "Company",
+      "target": "company",
+      "inverse_label": "Projects",
+      "kind": "one",
+      "inverse_kind": "many"
+    }
+  ]
+}
+```
+
+| Field | What it is |
+| --- | --- |
+| `id` | Pass it as `relationship_id` when you link records |
+| `object` | The object that owns the field. This is the `out` side. |
+| `key` and `label` | The field's key and name on that object |
+| `target` | The object it links to. This is the `in` side. |
+| `inverse_label` | The field's name on the target object |
+| `kind` | How many targets one record can have: `one` or `many` |
+| `inverse_kind` | How many records one target can have |
+
+## POST /relationships
+
+Links or unlinks two records.
+
+**Scope:** `write`
+
+| Field | Type | Required | What it does |
+| --- | --- | --- | --- |
+| `relationship_id` | string | Yes | From `GET /relationships` |
+| `record_id` | string | Yes | The record you start from |
+| `target_id` | string | Yes | The record on the other end |
+| `side` | string | No | `out` (default) when `record_id` is on the `object` side. `in` when it is on the `target` side. |
+| `op` | string | No | `add` (default) or `remove` |
+
+```bash
+curl -X POST https://app.tryomniscient.com/api/v1/relationships \
+  -H "Authorization: Bearer omn_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "relationship_id": "4c5d6e7f-8a9b-4c0d-9e1f-2a3b4c5d6e7f",
+    "record_id": "6d7e8f90-a1b2-4c3d-8e4f-5a6b7c8d9e0f",
+    "target_id": "7c8d9e0f-1a2b-4c3d-8e4f-5a6b7c8d9e0f"
+  }'
+```
+
+`200 OK` with `{"ok": true}`.
+
+When the side you link from is "one", linking a new target replaces the old one. A project with one company moves to the new company.
+
+## Errors
+
+| Status | `code` | `message` |
+| --- | --- | --- |
+| 400 | `bad_request` | `relationship_id, record_id and target_id are required.` |
+| 400 | `bad_request` | `This record isn't on that relationship` |
+| 400 | `bad_request` | `Pick a record the relationship links to` |
+| 400 | `bad_request` | `That relationship is gone` |
+| 404 | `not_found` | `No relationship with that id. GET /v1/relationships lists them.` |
+
+## Related
+
+<CardGrid>
+  <LinkCard title="Data model" href="/crm/data-model/" description="Add relationship fields." />
+  <LinkCard title="Custom objects" href="/api-reference/custom-objects/" description="Records of your own types." />
+</CardGrid>

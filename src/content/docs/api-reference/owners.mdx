@@ -1,0 +1,103 @@
+---
+title: "Owners"
+description: "List the people in an Omniscient workspace with GET /owners, and find an owner's free meeting times with GET /owners/:id/availability."
+sidebar:
+  label: "Owners"
+---
+
+import { Aside, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Owners are the members of the workspace. Any member can own a company, person, opportunity or record.
+
+## GET /owners
+
+Lists every member.
+
+**Scope:** `read`
+
+```bash
+curl https://app.tryomniscient.com/api/v1/owners \
+  -H "Authorization: Bearer omn_your_key"
+```
+
+`200 OK`
+
+```json
+{
+  "data": [
+    { "id": "f0e1d2c3-b4a5-4f6e-8d7c-9b0a1f2e3d4c", "email": "jordan@northwind.example.com", "name": "Jordan Lee", "role": "owner", "timezone": "America/New_York" },
+    { "id": "1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d", "email": "priya@northwind.example.com", "name": "Priya Shah", "role": "member", "timezone": "Europe/London" }
+  ]
+}
+```
+
+| Field | What it is |
+| --- | --- |
+| `id` | The person's user id. Use it as `owner_id`. |
+| `email` | Their sign-in email |
+| `name` | Their name, when they set one |
+| `role` | `owner`, `admin` or `member` |
+| `timezone` | Their time zone, as an IANA name |
+
+## GET /owners/:id/availability
+
+Finds open times to book a meeting with one owner. Omniscient reads the meetings it syncs from every calendar they connected, plus meetings they logged by hand.
+
+**Scope:** `read`
+
+| Parameter | Type | Default | What it does |
+| --- | --- | --- | --- |
+| `from` | string | Now | ISO date and time to start looking |
+| `to` | string | `from` plus 7 days | ISO date and time to stop. At most 14 days after `from`. |
+| `minutes` | number | `30` | Meeting length, from 15 to 120 |
+| `timezone` | string | The owner's | IANA name, like `America/New_York` |
+
+```bash
+curl "https://app.tryomniscient.com/api/v1/owners/f0e1d2c3-b4a5-4f6e-8d7c-9b0a1f2e3d4c/availability?minutes=45&timezone=America/Chicago" \
+  -H "Authorization: Bearer omn_your_key"
+```
+
+`200 OK`
+
+```json
+{
+  "owner_id": "f0e1d2c3-b4a5-4f6e-8d7c-9b0a1f2e3d4c",
+  "timezone": "America/Chicago",
+  "minutes": 45,
+  "calendars": 1,
+  "data": [
+    { "start": "2026-11-20T15:00:00.000Z", "end": "2026-11-20T15:45:00.000Z" },
+    { "start": "2026-11-20T15:30:00.000Z", "end": "2026-11-20T16:15:00.000Z" }
+  ]
+}
+```
+
+### How times are picked
+
+- Times start on the hour or half hour.
+- Only weekdays, between 9 and 5 in the chosen time zone. A meeting can't run past 5 or into the next day.
+- Nothing sooner than 2 hours from now.
+- A time is left out if it touches any synced meeting. A meeting with no end counts as 30 minutes.
+- Up to 50 times per call.
+
+`calendars` is how many calendars the owner connected. When it is `0`, only meetings they logged by hand count, so most times will look free.
+
+<Aside type="note">
+This call reads busy times only. To book, create the meeting in your own tool. It syncs back when it lands on the owner's calendar.
+</Aside>
+
+## Errors
+
+| Status | `code` | `message` |
+| --- | --- | --- |
+| 400 | `bad_request` | `from and to must be ISO dates, with to after from.` |
+| 400 | `bad_request` | `Ask for 14 days or less at a time.` |
+| 400 | `bad_request` | `timezone must be an IANA name like America/New_York.` |
+| 404 | `not_found` | `Owner not found.` |
+
+## Related
+
+<CardGrid>
+  <LinkCard title="Members" href="/settings/members/" description="Add and remove people." />
+  <LinkCard title="Claritia" href="/integrations/claritia/" description="Books meetings with these times." />
+</CardGrid>

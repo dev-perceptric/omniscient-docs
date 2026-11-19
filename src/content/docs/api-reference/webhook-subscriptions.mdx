@@ -1,0 +1,167 @@
+---
+title: "Webhook subscriptions"
+description: "Add, list and remove webhooks with your API key using GET, POST and DELETE /webhooks, and the JSON body Omniscient sends for every event."
+sidebar:
+  label: "Webhook subscriptions"
+---
+
+import { Aside, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Tools that connect with a key can add their own webhooks, so nobody has to set them up by hand. These webhooks belong to the key. Revoking the key deletes them. Webhooks added in **Settings** don't show here.
+
+For signatures, headers and retries, see [Webhooks](/developers/webhooks/).
+
+## GET /webhooks
+
+Lists this key's webhooks.
+
+**Scope:** `read`
+
+```bash
+curl https://app.tryomniscient.com/api/v1/webhooks \
+  -H "Authorization: Bearer omn_your_key"
+```
+
+`200 OK`
+
+```json
+{
+  "data": [
+    {
+      "id": "9f8e7d6c-5b4a-4c3d-9e2f-1a0b9c8d7e6f",
+      "url": "https://hooks.northwind.example.com/omniscient",
+      "events": ["opportunity.stage_changed", "opportunity.closed"],
+      "active": true,
+      "created_at": "2026-11-12T11:00:00+00:00"
+    }
+  ]
+}
+```
+
+## POST /webhooks
+
+Adds a webhook.
+
+**Scope:** `write`
+
+| Field | Type | Required | What it does |
+| --- | --- | --- | --- |
+| `url` | string | Yes | A public `https` address |
+| `events` | array | No | The events to send. Left out, every event. Unknown names are dropped. |
+
+```bash
+curl -X POST https://app.tryomniscient.com/api/v1/webhooks \
+  -H "Authorization: Bearer omn_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://hooks.northwind.example.com/omniscient", "events": ["opportunity.stage_changed", "opportunity.closed"]}'
+```
+
+`201 Created`
+
+```json
+{
+  "id": "9f8e7d6c-5b4a-4c3d-9e2f-1a0b9c8d7e6f",
+  "secret": "whsec_3Fq8Lm2Vn7Xc1Zb6Kd9Tg4Hr0Wy5Ps",
+  "events": ["opportunity.stage_changed", "opportunity.closed"]
+}
+```
+
+Store `secret` now. It is shown only once, and you need it to check signatures.
+
+### Address rules
+
+- It must start with `https://`.
+- No user name or password in it.
+- It must point to the public internet. `localhost`, `.local`, `.internal` and private network addresses are refused.
+- Up to 10 webhooks per key.
+
+## DELETE /webhooks
+
+Removes one of this key's webhooks.
+
+**Scope:** `write`
+
+```bash
+curl -X DELETE "https://app.tryomniscient.com/api/v1/webhooks?id=9f8e7d6c-5b4a-4c3d-9e2f-1a0b9c8d7e6f" \
+  -H "Authorization: Bearer omn_your_key"
+```
+
+`204 No Content`. Deleting an id that isn't yours, or is already gone, also answers `204`.
+
+## Events and their data
+
+Every call has the same outer shape:
+
+```json
+{
+  "id": "6f1c2a4e-0d8b-4b52-9a51-2f1f3e7c9b10",
+  "event": "opportunity.stage_changed",
+  "created_at": "2026-11-18T15:04:05.123Z",
+  "data": { }
+}
+```
+
+| Event | When | `data` |
+| --- | --- | --- |
+| `contact.created` | A person is added | A [contact object](/api-reference/contacts/#the-contact-object) |
+| `contact.updated` | A person's name, company, lifecycle or fields change | A contact object |
+| `opportunity.created` | An opportunity is opened | An [opportunity object](/api-reference/opportunities/#the-opportunity-object) |
+| `opportunity.stage_changed` | Its stage changes | An opportunity object plus `old_stage` |
+| `opportunity.closed` | It moves to a won or lost stage | An opportunity object |
+| `meeting.booked` | A meeting for later lands on a synced calendar, or someone logs one | See below |
+| `record.created` | A custom object record is made | A [record object](/api-reference/custom-objects/#the-record-object) |
+| `record.updated` | A custom object record changes | A record object |
+| `rule.fired` | A workflow reaches a **Send to webhooks** step | See below |
+| `ping` | Someone clicks **Send test** in **Settings** | A test body |
+
+An opportunity that moves to a won or lost stage sends both `opportunity.stage_changed` and `opportunity.closed`.
+
+### meeting.booked
+
+```json
+{
+  "id": "b7c8d9e0-f1a2-4b3c-8d4e-5f6a7b8c9d0e",
+  "starts_at": "2026-11-21T15:00:00+00:00",
+  "ends_at": "2026-11-21T15:30:00+00:00",
+  "title": "Lumen Health: rollout review",
+  "account_id": "7c8d9e0f-1a2b-4c3d-8e4f-5a6b7c8d9e0f",
+  "opportunity_id": "0b6f3c52-8d1e-4f7a-9c2b-5e4d3a2b1c0d",
+  "owner_id": "f0e1d2c3-b4a5-4f6e-8d7c-9b0a1f2e3d4c",
+  "participants": ["maya@lumenhealth.example.com", "jordan@northwind.example.com"]
+}
+```
+
+Meetings from a mailbox set to **Keep private** never go out. `title` is `null` unless the mailbox is set to **Share everything**.
+
+### rule.fired
+
+```json
+{
+  "rule": { "id": "1d2e3f4a-5b6c-4d7e-8f9a-0b1c2d3e4f5a", "name": "Big deal won" },
+  "record": { "type": "deal", "id": "0b6f3c52-8d1e-4f7a-9c2b-5e4d3a2b1c0d", "object": "deal", "name": "Lumen Health expansion" }
+}
+```
+
+## Errors
+
+| Status | `code` | `message` |
+| --- | --- | --- |
+| 400 | `bad_request` | `That isn't a web address.` |
+| 400 | `bad_request` | `The address must start with https://` |
+| 400 | `bad_request` | `Leave the user name and password out of the address.` |
+| 400 | `bad_request` | `That address is on a private network.` |
+| 400 | `bad_request` | `Couldn't find hooks.example.com.` |
+| 400 | `bad_request` | `events must include some of: contact.created, contact.updated, …` |
+| 400 | `bad_request` | `Up to 10 webhooks per key.` |
+| 400 | `bad_request` | `Pass ?id= of one of this key's webhooks.` |
+
+<Aside type="tip">
+Answer with any `2xx` within 10 seconds, then do the slow work later. Slow answers count as failures and are sent again.
+</Aside>
+
+## Related
+
+<CardGrid>
+  <LinkCard title="Webhooks" href="/developers/webhooks/" description="Headers, signatures and retries." />
+  <LinkCard title="Workflows" href="/otto/workflows/" description="Send to webhooks from a workflow step." />
+</CardGrid>

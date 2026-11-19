@@ -1,0 +1,67 @@
+---
+title: "GET /me"
+description: "Check an Omniscient API key: which workspace it belongs to, its name and its scopes."
+sidebar:
+  label: "GET /me"
+---
+
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Returns the workspace and the key you called with. Call it once when a tool connects, to check the key works and to show the workspace name.
+
+```http
+GET https://app.tryomniscient.com/api/v1/me
+```
+
+**Scope:** `read`
+
+## Parameters
+
+None.
+
+## Request
+
+```bash
+curl https://app.tryomniscient.com/api/v1/me \
+  -H "Authorization: Bearer omn_your_key"
+```
+
+## Response
+
+`200 OK`
+
+```json
+{
+  "product": "omniscient",
+  "workspace": "Northwind",
+  "workspace_id": "5d6c7b8a-1e2f-4a3b-9c8d-7e6f5a4b3c2d",
+  "domain": "northwind.example.com",
+  "name": "Data warehouse sync",
+  "scopes": ["read", "write"]
+}
+```
+
+| Field | Type | What it is |
+| --- | --- | --- |
+| `product` | string | Always `omniscient`. Tools that connect to several products use it to tell them apart. |
+| `workspace` | string | The workspace's name |
+| `workspace_id` | string | The workspace's id |
+| `domain` | string or null | The workspace's email domain, if it has one |
+| `name` | string | The key's name, as it shows in **Settings** |
+| `scopes` | array | `read`, `write` or both |
+
+## Errors
+
+| Status | `code` | `message` |
+| --- | --- | --- |
+| 401 | `unauthorized` | `Send your API key as: Authorization: Bearer omn_…` |
+| 401 | `unauthorized` | `That key doesn't work. It may have been revoked.` |
+| 403 | `forbidden` | `This key can't read.` |
+| 429 | `rate_limited` | `Up to 600 requests a minute per key.` |
+
+## Related
+
+<CardGrid>
+  <LinkCard title="Authentication" href="/api-reference/authentication/" description="Make and revoke keys." />
+  <LinkCard title="GET /owners" href="/api-reference/owners/" description="The people in the workspace." />
+</CardGrid>

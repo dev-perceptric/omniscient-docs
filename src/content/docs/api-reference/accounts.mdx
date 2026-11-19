@@ -1,0 +1,130 @@
+---
+title: "Accounts"
+description: "List, read, create and update companies in Omniscient with GET /accounts, GET /accounts/:id and POST /accounts, which finds a company by domain."
+sidebar:
+  label: "Accounts"
+---
+
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+The API calls companies "accounts". Each company has one website domain, and Omniscient uses the domain to find it. Two companies in one workspace can't share a domain.
+
+## The account object
+
+```json
+{
+  "id": "7c8d9e0f-1a2b-4c3d-8e4f-5a6b7c8d9e0f",
+  "name": "Lumen Health",
+  "domain": "lumenhealth.example.com",
+  "fields": { "industry": "Healthcare", "employees": 420 },
+  "last_activity_at": "2026-11-17T15:20:00+00:00",
+  "created_at": "2026-10-02T09:12:40+00:00"
+}
+```
+
+| Field | Type | What it is |
+| --- | --- | --- |
+| `id` | string | The company's id |
+| `name` | string | Its name |
+| `domain` | string | Its website domain, without `https://` or `www.` |
+| `fields` | object | Every custom field value, by key |
+| `last_activity_at` | string or null | The last email or meeting with anyone there |
+| `created_at` | string | When it was added |
+
+Companies that were merged into another company don't show in lists.
+
+## GET /accounts
+
+Lists companies, newest first.
+
+```http
+GET https://app.tryomniscient.com/api/v1/accounts
+```
+
+**Scope:** `read`
+
+| Parameter | Type | What it does |
+| --- | --- | --- |
+| `domain` | string | Only the company with this domain. `https://`, `www.` and any path are taken off first, so `https://www.lumenhealth.example.com/about` works. |
+| `limit` | number | 1 to 100, default 50 |
+| `offset` | number | Rows to skip, default 0 |
+
+```bash
+curl "https://app.tryomniscient.com/api/v1/accounts?domain=lumenhealth.example.com" \
+  -H "Authorization: Bearer omn_your_key"
+```
+
+`200 OK`
+
+```json
+{
+  "data": [
+    {
+      "id": "7c8d9e0f-1a2b-4c3d-8e4f-5a6b7c8d9e0f",
+      "name": "Lumen Health",
+      "domain": "lumenhealth.example.com",
+      "fields": { "industry": "Healthcare" },
+      "last_activity_at": "2026-11-17T15:20:00+00:00",
+      "created_at": "2026-10-02T09:12:40+00:00"
+    }
+  ],
+  "limit": 50,
+  "offset": 0
+}
+```
+
+## GET /accounts/:id
+
+Reads one company.
+
+```bash
+curl https://app.tryomniscient.com/api/v1/accounts/7c8d9e0f-1a2b-4c3d-8e4f-5a6b7c8d9e0f \
+  -H "Authorization: Bearer omn_your_key"
+```
+
+`200 OK` with one account object. To get the people at a company, call `GET /contacts?account_id=…`. For its opportunities, call `GET /opportunities?account_id=…`.
+
+## POST /accounts
+
+Creates a company, or fills in the one that already has this domain.
+
+```http
+POST https://app.tryomniscient.com/api/v1/accounts
+```
+
+**Scope:** `write`
+
+| Field | Type | Required | What it does |
+| --- | --- | --- | --- |
+| `domain` | string | Yes | Finds the company. Must have a dot, like `acme.example.com`. |
+| `name` | string | No | Used only when the company is new. Left out, the name comes from the domain, like "Acme". |
+| `fields` | object | No | Custom field values by key. Only empty fields are filled. |
+
+```bash
+curl -X POST https://app.tryomniscient.com/api/v1/accounts \
+  -H "Authorization: Bearer omn_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"domain": "harborbank.example.com", "name": "Harbor Bank", "fields": {"industry": "Banking"}}'
+```
+
+`201 Created` when the company is new, `200 OK` when it already existed. The body is the account object.
+
+On an existing company, the name never changes and fields that already have a value keep it. If the domain belongs to a company that was merged, the call updates the company it was merged into.
+
+## Errors
+
+| Status | `code` | `message` |
+| --- | --- | --- |
+| 400 | `bad_request` | `domain is required` |
+| 400 | `bad_request` | `Send a JSON object.` or `That isn't valid JSON.` |
+| 401 | `unauthorized` | The key is missing or revoked |
+| 403 | `forbidden` | `This key can't write.` |
+| 404 | `not_found` | `Account not found.` |
+| 413 | `too_large` | `Bodies are limited to 100 KB.` |
+
+## Related
+
+<CardGrid>
+  <LinkCard title="Contacts" href="/api-reference/contacts/" description="People at a company." />
+  <LinkCard title="Opportunities" href="/api-reference/opportunities/" description="Deals with a company." />
+</CardGrid>
