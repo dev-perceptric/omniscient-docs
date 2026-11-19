@@ -1,0 +1,76 @@
+---
+title: "Settings"
+description: "A map of every Omniscient settings page: what each one is for, who can open it and where to find its full guide."
+sidebar:
+  label: "Overview"
+---
+
+import { Aside, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Open **Settings** from the foot of the sidebar. Settings has its own list of pages on the left, in four groups. Each page has its own address, like `/settings/members`, so you can bookmark one or send a link to a teammate.
+
+Your own settings change things only for you. Workspace, connection and data settings change things for the whole team, and some are for owners and admins only.
+
+## You
+
+Settings that follow you, in every workspace you're in.
+
+| Page | Address | What it's for | Who sees it |
+| --- | --- | --- | --- |
+| [Account](/settings/account/) | `/settings/account` | Your name, picture, email, sign-in methods, your data and deleting your account | Everyone |
+| [Security](/settings/security/) | `/settings/security` | Password, two-step verification, passkeys, devices and recent activity | Everyone |
+| [Notifications](/settings/notifications/) | `/settings/notifications` | Your email digest, getting-started tips and the team digest in Slack | Everyone |
+| [Experience](/settings/experience/) | `/settings/experience` | Light or dark, and how dates, times and numbers show | Everyone |
+
+## Workspace
+
+Settings for the whole team.
+
+| Page | Address | What it's for | Who sees it |
+| --- | --- | --- | --- |
+| [General](/settings/general/) | `/settings` | The workspace name, team domain, industry and the danger zone | Everyone. Owners and admins change it. |
+| [Members](/settings/members/) | `/settings/members` | Invite people, set roles and seats, and remove people | Everyone. Owners and admins change it. |
+| [Sign-in](/settings/sign-in/) | `/settings/signin` | Two-step for everyone, ways to sign in, sessions, domains, SSO, SCIM, invite links and the audit log | Owners and admins |
+| [Brand](/settings/brand/) | `/settings/brand` | Your logo, colors, fonts and voice on the pages people sign | Owners and admins |
+| [Templates](/settings/templates/) | `/settings/templates` | Messages your team writes for LinkedIn and email | Everyone |
+| [Plans & billing](/settings/plans-and-billing/) | `/settings/billing` | Your plan, seats and billing | Everyone. Owners and admins change it. |
+
+## Connections
+
+How Omniscient reaches your tools.
+
+| Page | Address | What it's for | Who sees it |
+| --- | --- | --- | --- |
+| [Mail & calendar](/settings/mail-and-calendar/) | `/settings/mail` | Connect mailboxes, sync settings and sharing | Everyone |
+| [Call notes](/settings/call-notes/) | `/settings/calls` | Google Meet, Microsoft Teams and Zoom, and which calls get notes | Everyone |
+| [Chrome extension](/settings/chrome-extension/) | `/settings/extension` | Install and connect the extension, and where LinkedIn details go | Everyone. Owners and admins set the LinkedIn fields. |
+| [Integrations](/settings/integrations/) | `/settings/apps` | The app store, Claritia, Arrowsterr and Developers | Everyone. Team apps need an owner or admin. |
+
+## Data
+
+Your records and how they're shaped.
+
+| Page | Address | What it's for | Who sees it |
+| --- | --- | --- | --- |
+| [Data model](/crm/data-model/) | `/workspace/objects` | Objects, fields and relationships | Everyone. Owners and admins change it. |
+| [Workflows](/otto/workflows/) | `/workflows` | Opens the Workflows page | Everyone. Owners and admins change them. |
+| [Capture](/settings/capture/) | `/settings/capture` | Website forms, lead webhooks and who owns new opportunities | Owners and admins |
+| [Imports](/settings/imports/) | `/settings/imports` | Bring records from HubSpot, Salesforce, Attio or Pipedrive | Owners and admins |
+| [Trash](/settings/trash/) | `/settings/trash` | Deleted records for 30 days, to restore or delete forever | Everyone |
+
+Members don't see **Sign-in**, **Brand**, **Capture** or **Imports** in the list at all.
+
+<Aside type="tip">
+Press <kbd>⌘</kbd> <kbd>K</kbd> and type "Settings" to jump there from any page.
+</Aside>
+
+## How settings save
+
+Most settings save the moment you change them. A short line at the bottom of the screen says what changed, like "Name saved". A few sections, like **Sync settings**, have a **Save** button instead. If a save fails, the line says so and offers **Retry**.
+
+## Related
+
+<CardGrid>
+  <LinkCard title="Roles and permissions" href="/workspace/roles-and-permissions/" description="Who can change what." />
+  <LinkCard title="The interface" href="/get-started/the-interface/" description="The sidebar, search and Otto." />
+</CardGrid>
