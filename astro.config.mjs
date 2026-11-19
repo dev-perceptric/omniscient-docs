@@ -29,7 +29,7 @@ export default defineConfig({
         group('Workspace', 'workspace', ['members-and-roles', 'account-and-security', 'sign-in-rules-and-sso', 'plans-and-billing', 'data-and-trash']),
         { label: 'Developers', collapsed: true, items: ['developers/api', 'developers/webhooks', 'developers/mcp'] },
         { label: 'API reference', collapsed: true, items: ['api-reference', ...['authentication', 'me', 'contacts', 'accounts', 'opportunities', 'leads', 'activities', 'notes', 'custom-objects', 'lists', 'relationships', 'owners', 'webhook-subscriptions', 'capture', 'mcp-tools'].map((p) => `api-reference/${p}`)] },
-        { label: 'Reference', collapsed: true, items: ['reference/glossary', 'reference/faq', 'reference/troubleshooting'] },
+        { label: 'Reference', collapsed: true, items: ['reference/glossary', 'reference/faq', 'reference/troubleshooting', 'reference/changelog'] },
       ],
     }),
   ],

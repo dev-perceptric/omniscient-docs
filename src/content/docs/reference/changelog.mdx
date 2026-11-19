@@ -1,0 +1,172 @@
+---
+title: "Changelog"
+description: "What's new in Omniscient each month: new features, changes and fixes you'd notice in the app, newest first."
+sidebar:
+  label: "Changelog"
+---
+
+import { Aside, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+What changed in Omniscient, month by month, newest first. Each month lists what's new, what got better and what was fixed. Changes you only see behind the scenes are left out.
+
+## November 2026
+
+### New
+
+**Sign-in and security**
+
+- **Settings, then Account** has your name, picture, email and the Google, Microsoft and Apple accounts you sign in with.
+- **Settings, then Security** adds two-step sign-in with an authenticator app, passkeys, backup codes and a list of your sessions you can end.
+- Sign in with a passkey straight from the email field's autofill.
+- **Sign in with Apple**, and text message codes for two-step, where they are available.
+- **Settings, then Sign-in** lets owners and admins ask everyone to use two-step, pick the ways people can sign in, set how long a session lasts, prove your email domain, set up company single sign-on (SAML) with Okta, Entra or Google Workspace, add SCIM keys, make invite links by role, and read and download the audit log.
+- A bot check on the sign-in screen and limits on how many sign-in emails go out.
+- Getting-started emails in your first days, to help you connect your inbox and invite your team.
+
+**Otto**
+
+- **Skills**: a Skills page and a **/** menu in Ask Otto. Otto ships with system skills, picks the right one on its own, and your team can write workspace and personal skills.
+- **Knowledge** and **Skills** have their own places in the sidebar, under Otto.
+- Save a skill or a Knowledge document straight from a chat.
+- Drop a PDF or Word file into Ask Otto, and drop a CSV to import records with a plan you check first. You can undo an import.
+- **Find leads** in Otto: lead lists, people at a company and lookalike companies, with email fill and job changes. You save leads to the CRM with a click.
+- Otto searches by meaning, so "customers worried about price" finds notes that never use those words.
+- Otto can search the web and read a page or a whole site.
+- **Build a report** and **Sort and score records** skills.
+- Otto on every page: a floating Ask bar and a side panel that knows the record or list on screen, including its filters.
+- Otto builds a workflow from a chat and tells you how its runs went.
+- Otto can set up your CRM for your industry: views, draft workflows, required fields and your industry's words, like "Clients" or "Matters".
+
+**CRM**
+
+- **Trash**: deleting a record moves it to **Settings, then Trash** with what came with it. Restore it, or delete it forever. Trash empties after 30 days.
+- **Export view** as CSV, Excel or JSON from the **Import / Export** menu on every list.
+- Lists have filter groups with **Any**, **All** or **None**, more than one sort, and keep their state in the address so you can share a link.
+- **Favorites** at the top of the sidebar, and **Settings, then Experience** for light or dark.
+- Company logos come from the company's website.
+- **Import through Ask Otto** right from Companies, People and Opportunities.
+
+**Email, calendar and meetings**
+
+- **Connect other mail** over IMAP, like Fastmail, iCloud, Yahoo, Zoho, Titan, Hostinger and GoDaddy. It syncs like Gmail.
+- One **Connect email** button that works out whether you use Google, Microsoft or other mail.
+- Summary emails from notetakers, like Otter and Fireflies, become call notes.
+- One row per email thread, joined across your teammates' mailboxes, and a reader that shows every email in the thread.
+- Better mail sorting: about 16,000 personal mail domains are known, so they never become companies. Deleted mail leaves the timeline. Aliases, shared inboxes and extra emails on a person are understood.
+
+**Workflows**
+
+- A new full-page workflow editor on a canvas, with a side panel for each step.
+- Replies are sorted. An out-of-office reply pauses the run until the person is back, instead of stopping it.
+- Run history for each step, and **Retry** from the step that failed.
+
+**Integrations and developers**
+
+- **Settings, then Integrations** is an app store: search, a category menu and a page for each app.
+- Slack, Zoom and the HubSpot, Salesforce, Attio and Pipedrive imports sign in with one click.
+- Otto can act in your connected apps. Reads run on their own, and changes ask you first.
+- The **MCP server**: Claude, ChatGPT and Cursor connect to your CRM with one click.
+
+**Chrome extension**
+
+- The Omniscient Chrome extension saves the LinkedIn profile, company or search results you have open, at most 10 at a click.
+- A side panel shows the person's Omniscient record beside the page you're on.
+- Put one of your team's message templates into a LinkedIn or Gmail message box, to read, change and send yourself.
+- Works on any website and on Sales Navigator, and finds a work email and phone.
+
+### Changed
+
+- New onboarding: Otto guides six screens, from your website and logo to your inbox and team, and ends on **Start here**.
+- A black and white look across the app, with the Checker logo.
+- One email design, in the same look, for every email Omniscient sends.
+- The record page has one row of tabs, a quieter header, an activity rail and an **Emails** tab that reads threads in place.
+- Opportunities opens on the board.
+- Each list has a search box, saved views as tabs, an **Import / Export** menu and a **Display** button.
+- Text is never cut off with "…" anywhere in the app. It wraps.
+- Contracts left the CRM. Otto reads contracts with the **Pull contract terms** skill. Signing and review pages your buyers already have keep working.
+- Scout moved into Otto. Old Scout links open Ask Otto.
+- Experiences and the Library were removed. Their links open the app's first page. Pages your buyers already have keep working.
+
+### Fixed
+
+- Field and view access follow each person's permissions everywhere.
+- Otto ignores instructions hidden in emails and web pages.
+- A mailbox that keeps failing to sync waits longer between tries instead of failing over and over.
+- Workflow steps that hit a hiccup try again on their own.
+- Clicks on Emails and Skills that did nothing now open the item.
+- Passkey autofill no longer pops up when you don't want it, and a sign-in link opened in another browser says what to do.
+
+## October 2026
+
+Omniscient opened on October 11.
+
+### New
+
+**The CRM**
+
+- Companies, People and Opportunities, with record pages you edit in place.
+- Saved views, merging duplicates and CSV import.
+- Table, Kanban, Calendar and List layouts on every list.
+- Edit cells right in the table, like a spreadsheet, with copy and paste.
+- A side panel to open a record without leaving the list, and bulk edit for many records.
+- Delete records from every list and record page.
+- Files on records.
+- Custom pipelines and stages, and a lifecycle on each person.
+- **Data model**: add your own objects and fields, with 15 field types, relationship fields and calculated fields.
+
+**Email and calendar**
+
+- Gmail and Google Calendar sync, then Outlook and Microsoft 365, with Teams transcripts.
+- Sharing settings for each mailbox: share everything, share who and when, or keep it private.
+- Send email from Gmail and Outlook inside Omniscient, and see what your first sync found.
+- A sync banner on every page when Gmail, Calendar or Zoom stops syncing.
+- Open any email in a reader on the Emails page.
+
+**AI**
+
+- Omniscient reads your email threads, suggests field values and writes briefs.
+- Field rules: AI fills any field from meetings and emails by the rule you write.
+- Ask (now Ask Otto) on every page, aware of the record or list on screen, with cards you confirm before anything changes.
+- Meeting prep, follow-up drafts and call notes from Google Meet and Zoom transcripts, or from a recording you upload.
+- **Knowledge**: shared and personal documents that Ask and drafts read first.
+- Otto the owl, the face of every agent.
+
+**Teams and billing**
+
+- Teams, digests, and plans with a 14-day Pro trial.
+- Delete a workspace: owners only, after typing its name.
+
+**Connections**
+
+- Imports from HubSpot, Salesforce, Attio and Pipedrive: companies, people, opportunities with their stages, and notes.
+- Web forms and webhooks that add people, with automatic owner assignment.
+- A public API and webhooks, and the one-click Connect button for Claritia and Arrowsterr.
+- Logos for every tool, and one-click connections.
+
+**Workflows**
+
+- Workflows with drafts and versions, AI steps, runs and test runs.
+
+### Changed
+
+- The welcome flow asks what to sync before your first sync.
+- Settings moved into a sidebar, with one page per area.
+- Every menu, picker and tooltip opens above the page, so nothing is cut off.
+- Keyboard: list keys, actions in the ⌘K menu and a shortcuts sheet.
+- Each screen loads its own code, so the app opens faster, with skeletons while it loads.
+- The app's own dropdowns and dialogs replace the browser's everywhere.
+- Tasks and the Lists page were removed. Next steps live on each opportunity's **Next step** field.
+- New workspaces start empty, with no sample records.
+
+### Fixed
+
+- Calendar keeps syncing when a Google account has no Gmail inbox.
+- Security emails from other services no longer show up as activity.
+- A screen that breaks shows what went wrong and stays in its own place, so the rest of the app keeps working.
+
+## Related
+
+<CardGrid>
+  <LinkCard title="Your first week" href="/get-started/your-first-week/" description="Try the newest features in order." />
+  <LinkCard title="FAQ" href="/reference/faq/" description="Common questions." />
+</CardGrid>
