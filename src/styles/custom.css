@@ -201,3 +201,12 @@ starlight-tabs [role='tab'][aria-selected='true'] { color: var(--sl-color-white)
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
 }
+
+/* Product screenshots: a 12px corner and the ring shadow, like a raised panel in the app. Narrow ones (dialogs,
+   menus, the extension's side panel) show at their own size. */
+.sl-markdown-content p > img,
+.sl-markdown-content .shot img { display: block; height: auto; border-radius: var(--om-radius); box-shadow: var(--om-ring); }
+.sl-markdown-content .shot { margin-block: 1.25rem; }
+.sl-markdown-content .shot-400 img { max-width: min(100%, 400px); }
+.sl-markdown-content .shot-500 img { max-width: min(100%, 500px); }
+.sl-markdown-content .shot-640 img { max-width: min(100%, 640px); }

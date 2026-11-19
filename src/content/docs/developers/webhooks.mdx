@@ -21,7 +21,15 @@ A webhook sends a message to your own address when something changes in Omniscie
 
 </Steps>
 
+<div class="shot shot-500">
+
+![The New webhook dialog with the address box and the events to pick](../../../assets/shots/developers/new-webhook.webp)
+
+</div>
+
 Click **Send test** to send a `ping` event. Turn a webhook off with its switch, or click **Delete** to remove it. A webhook that keeps failing shows a **Failing** tag.
+
+![Two webhooks with their events, last status and switches](../../../assets/shots/developers/webhooks.webp)
 
 You can also add webhooks with the API: `POST /api/v1/webhooks` with `url` and `events`. Each key can have up to 10.
 

@@ -9,6 +9,8 @@ import { Aside, CardGrid, LinkCard, Steps } from '@astrojs/starlight/components'
 
 A workflow runs a sales motion on its own: when something happens, it sends emails, waits, checks for replies and updates records. Emails go out from the owner's own mailbox, and every email needs a person's approval before the workflow can go live. Open **Workflows** under **Automations** in the sidebar.
 
+![Workflows in folders, each with its status: Live, Draft or Paused](../../../assets/shots/otto/workflows.webp)
+
 ## Make a workflow
 
 <Steps>
@@ -20,6 +22,8 @@ A workflow runs a sales motion on its own: when something happens, it sends emai
 1. Approve each email step, then click **Go live**.
 
 </Steps>
+
+![The workflow editor: a trigger, a wait, a branch on replies, a notice and a follow-up email](../../../assets/shots/otto/workflow-editor.webp)
 
 Or ask Otto: "Build a workflow that emails people two days after a meeting and stops if they reply." Otto shows the workflow on a card, and saving it makes a draft for you to check. Otto never takes a workflow live from a chat.
 
@@ -63,6 +67,8 @@ Turn on **Keep going if this fails** on a step to move on when that step can't f
 
 In a **Send email** step, write the **Subject** and the **Email**. Click a field name to drop it in, like `{{first_name|there}}`, which uses "there" when the first name is blank. Click **Draft** to have Otto write it, or **Rewrite** to have him rework your words.
 
+![A Send email step open in the side panel, with the email, Insert a field and Otto's rewrite box](../../../assets/shots/otto/workflow-email-step.webp)
+
 When the words look right, click **Approve**. Changing an approved email takes the approval away, so it gets checked again. The workflow won't go live until every email is approved.
 
 ## Go live, pause and change
@@ -90,6 +96,8 @@ Change working hours and each mailbox's **Emails a day** from **Sending** at the
 ## Watch your runs
 
 Open a workflow and click **Runs** to see who is in it, the step they are on, when the next step runs, and how many emails were sent and answered. Replies are tagged **Interested**, **Not interested**, **Out of office** or **Other reply**.
+
+![A workflow's Runs tab: emails sent and replied, and each person in it with their step](../../../assets/shots/otto/workflow-runs.webp)
 
 - Click a run to see the workflow with each step marked done, failed, waiting or not reached. Click a step to see what it did.
 - **Stop** or **Take out** removes a person from the run.
