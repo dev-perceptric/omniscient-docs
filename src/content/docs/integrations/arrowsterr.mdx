@@ -1,0 +1,49 @@
+---
+title: "Arrowsterr"
+description: "Connect Arrowsterr, the SEO and AI search app, so its marketing activity lands on your Omniscient records."
+sidebar:
+  label: "Arrowsterr"
+---
+
+import { CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
+
+Arrowsterr tracks how AI answers talk about your brand, and how people find your site. Connected to Omniscient, it logs what your contacts did on your site onto their records.
+
+## At a glance
+
+| | |
+| --- | --- |
+| **Connect** | From Arrowsterr's settings, then **Allow** on Omniscient's approve page |
+| **Who connects** | Owners and admins of the Omniscient workspace |
+| **Direction** | Both ways. Arrowsterr logs activity into Omniscient and reads records as you allow. |
+| **How often** | As things happen |
+| **What it can do** | Contacts, accounts and opportunities; log marketing activity |
+| **Disconnect** | The disconnect icon on Arrowsterr's card in **Settings**, then **Integrations** |
+
+## Connect Arrowsterr
+
+<Steps>
+
+1. In Arrowsterr, open its settings and pick Omniscient.
+1. Arrowsterr sends you to Omniscient's approve page.
+1. An owner or admin clicks **Allow**.
+1. Back in Arrowsterr, the connection shows the Omniscient workspace's name.
+
+</Steps>
+
+Arrowsterr's card in **Settings**, then **Integrations**, shows **Connected** once it's done.
+
+## What you see in Omniscient
+
+Arrowsterr logs activity on people, like a page view or a piece of content read. Each shows in the **Marketing** card on the person's record, with its time and a link.
+
+## Disconnect
+
+Click the disconnect icon on Arrowsterr's card in **Settings**, then **Integrations**, and confirm. Its key is revoked and anything it logged stays.
+
+## Related
+
+<CardGrid>
+  <LinkCard title="POST /activities" href="/api-reference/activities/" description="The call Arrowsterr makes." />
+  <LinkCard title="Record pages" href="/crm/record-pages/" description="Where the Marketing card shows." />
+</CardGrid>

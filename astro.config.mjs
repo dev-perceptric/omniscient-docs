@@ -25,7 +25,7 @@ export default defineConfig({
         group('Otto', 'otto', ['ask-otto', 'skills-and-knowledge', 'find-leads', 'record-updates-and-drafts', 'workflows']),
         group('Email and calendar', 'email-and-calendar', ['email', 'meetings-and-call-notes']),
         group('Chrome extension', 'chrome-extension', ['install-and-connect', 'use-the-extension']),
-        { label: 'Integrations', collapsed: true, items: ['integrations', ...['google', 'microsoft', 'zoom', 'slack', 'crm-imports'].map((p) => `integrations/${p}`)] },
+        { label: 'Integrations', collapsed: true, items: ['integrations', ...['google', 'microsoft', 'other-email', 'zoom', 'notetakers', 'slack', 'crm-imports', 'hubspot', 'salesforce', 'attio', 'pipedrive', 'claritia', 'arrowsterr', 'ai-apps', 'app-store', 'e-sign'].map((p) => `integrations/${p}`)] },
         group('Workspace', 'workspace', ['members-and-roles', 'roles-and-permissions', 'account-and-security', 'sign-in-rules-and-sso', 'plans-and-billing', 'plan-limits', 'data-and-trash']),
         { label: 'Developers', collapsed: true, items: ['developers/api', 'developers/webhooks', 'developers/mcp'] },
         { label: 'API reference', collapsed: true, items: ['api-reference', ...['authentication', 'me', 'contacts', 'accounts', 'opportunities', 'leads', 'activities', 'notes', 'custom-objects', 'lists', 'relationships', 'owners', 'webhook-subscriptions', 'capture', 'mcp-tools'].map((p) => `api-reference/${p}`)] },

@@ -1,0 +1,68 @@
+---
+title: "Salesforce"
+description: "Import accounts, contacts, leads, opportunities with their stages, and notes from Salesforce into Omniscient with one sign-in."
+sidebar:
+  label: "Salesforce"
+---
+
+import { Aside, CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
+
+Bring your Salesforce org into Omniscient with one sign-in. Omniscient reads your records and copies them in. It never writes to Salesforce.
+
+## At a glance
+
+| | |
+| --- | --- |
+| **Connect** | **Settings**, then **Imports**, then **Salesforce**, then **Connect Salesforce**. Or from Salesforce's card in **Settings**, then **Integrations**. |
+| **Who connects** | Owners and admins |
+| **What comes over** | Accounts, contacts, leads, opportunity stages, opportunities and notes |
+| **Direction** | Salesforce into Omniscient, one time per import |
+| **How often** | When you click **Import** |
+| **What it asks for** | Read access to your org's records, and offline access so a long import can finish |
+| **Disconnect** | Salesforce's card in **Settings**, then **Integrations** |
+
+## Import from Salesforce
+
+<Steps>
+
+1. Go to **Settings**, then **Imports**, and pick **Salesforce**.
+1. Click **Connect Salesforce** and sign in with a user who can read every account, contact, lead and opportunity you want.
+1. Approve access. The import starts.
+1. When it says **Finished**, check your records.
+
+</Steps>
+
+## What comes over
+
+| In Salesforce | In Omniscient |
+| --- | --- |
+| Accounts | Companies, matched by their website |
+| Contacts | People, linked to their account |
+| Leads | People, with their lead status, company, title and phone |
+| Opportunity stages | Stages in one pipeline, with each stage's default probability |
+| Opportunities | Opportunities with name, amount, close date, stage, won or lost, and owner |
+| Notes | Notes on the matching record |
+
+Opportunity owners are matched by email to people in your workspace.
+
+## If it fails
+
+| You see | What to do |
+| --- | --- |
+| Salesforce did not return a refresh token. Allow offline access on the connected app. | Ask your Salesforce admin to allow offline access for the Omniscient connected app |
+| Salesforce didn't say where the org lives. Connect it again. | Connect again |
+| The import's sign-in is gone. Start it again. | Click **Connect Salesforce** again |
+| An import is already running. Wait for it to finish. | Wait. One import runs at a time. |
+
+Sandboxes connect the same way when your server is set to use the sandbox sign-in.
+
+## Disconnect
+
+Click **Disconnect** on Salesforce's card in **Settings**, then **Integrations**. Imported records stay.
+
+## Related
+
+<CardGrid>
+  <LinkCard title="CRM imports" href="/integrations/crm-imports/" description="All four imports side by side." />
+  <LinkCard title="Opportunities and pipelines" href="/crm/opportunities-and-pipelines/" description="Tidy the stages after an import." />
+</CardGrid>

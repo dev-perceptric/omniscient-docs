@@ -1,0 +1,60 @@
+---
+title: "Pipedrive"
+description: "Import organizations, people, pipelines, stages, deals and notes from Pipedrive into Omniscient."
+sidebar:
+  label: "Pipedrive"
+---
+
+import { Aside, CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
+
+Copy your Pipedrive account into Omniscient. Omniscient reads your records once per import and never writes to Pipedrive.
+
+## At a glance
+
+| | |
+| --- | --- |
+| **Connect** | **Settings**, then **Imports**, then **Pipedrive**, then **Connect Pipedrive** |
+| **Who connects** | Owners and admins |
+| **What comes over** | Organizations, people, pipelines and stages, deals and notes |
+| **Direction** | Pipedrive into Omniscient, one time per import |
+| **How often** | When you click **Import** |
+| **What it asks for** | Your Pipedrive API key, typed on the sign-in page |
+| **Disconnect** | Pipedrive's card in **Settings**, then **Integrations** |
+
+## Import from Pipedrive
+
+<Steps>
+
+1. Go to **Settings**, then **Imports**, and pick **Pipedrive**.
+1. Click **Connect Pipedrive**. The sign-in page asks for your Pipedrive API key. Find it in Pipedrive under **Settings**, then **Personal preferences**, then **API**.
+1. The import runs: companies, people, pipelines, opportunities, then notes.
+1. When it says **Finished**, check your records.
+
+</Steps>
+
+## What comes over
+
+| In Pipedrive | In Omniscient |
+| --- | --- |
+| Organizations | Companies |
+| People | People, linked to their organization |
+| Pipelines and stages | Pipelines and stages, with each stage's probability |
+| Deals, open, won and lost | Opportunities with name, value, expected close date, stage and owner |
+| Notes | Notes on the matching record |
+
+Deleted deals are skipped. Deal owners are matched by email to workspace members.
+
+<Aside type="note">
+Pipedrive organizations don't carry a website, so they come in without a domain. Add domains later, and Omniscient links new emails to the company. Merge any company your inbox already made from the same domain.
+</Aside>
+
+## Disconnect
+
+Click **Disconnect** on Pipedrive's card in **Settings**, then **Integrations**. Imported records stay.
+
+## Related
+
+<CardGrid>
+  <LinkCard title="CRM imports" href="/integrations/crm-imports/" description="All four imports side by side." />
+  <LinkCard title="Companies and people" href="/crm/companies-and-people/" description="Merge duplicates after an import." />
+</CardGrid>

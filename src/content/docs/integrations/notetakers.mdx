@@ -1,0 +1,50 @@
+---
+title: "Notetaker apps"
+description: "How Omniscient turns summary emails from Otter, Fireflies, Fathom, tl;dv, Read.ai, Zoom AI Companion and Notes by Gemini into call notes on the right meeting."
+sidebar:
+  label: "Notetaker apps"
+---
+
+import { Aside, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+If your team already uses a notetaker, you don't need to connect it. Most notetakers email a summary after each call. Omniscient finds those emails in your inbox and puts the summary on the meeting.
+
+## At a glance
+
+| | |
+| --- | --- |
+| **Connect** | Nothing to connect. Connect your mailbox, and the summaries come with it. |
+| **Who** | Each person, through their own mailbox |
+| **Apps** | Otter, Fireflies, Fathom, tl;dv, Read.ai, Zoom AI Companion and Notes by Gemini |
+| **Direction** | Into Omniscient |
+| **How often** | With each mailbox sync, about every 5 minutes |
+| **What it reads** | The summary email: title, time, length, people, summary, action items and the recording link |
+| **Turn off** | Pick **No call notes** under **Which calls get notes** in **Settings**, then **Call notes** |
+
+## How it works
+
+1. Your notetaker sends its summary email after the call.
+1. Omniscient's sync reads the email and sees which app sent it.
+1. It finds the meeting the email is about, by time and by who was there.
+1. The summary, the action items and the recording link show on the meeting.
+
+Summary emails are looked for on their own, apart from your other mail, so a summary is read even when Gmail files it under Updates or Promotions, which other syncs skip. A new mailbox picks up summaries from as far back as your sync settings reach.
+
+## Which calls get notes
+
+The same setting as for Zoom, Meet and Teams: **Notes for external meetings only**, **Notes for all meetings** or **No call notes**. Find it in **Settings**, then **Call notes**.
+
+## Connect a notetaker as an app
+
+You can also connect Fireflies, Fathom, Grain, Otter, tl;dv, Read.ai, Avoma, Gong or Webex in [the app store](/integrations/app-store/). That lets Otto look up what was said on a call when you ask. Each person connects their own notetaker.
+
+<Aside type="note">
+Omniscient writes its own notes from Zoom, Google Meet and Microsoft Teams transcripts. A notetaker's summary and Omniscient's notes can both show on the same meeting.
+</Aside>
+
+## Related
+
+<CardGrid>
+  <LinkCard title="Meetings and call notes" href="/email-and-calendar/meetings-and-call-notes/" description="Prep briefs and notes." />
+  <LinkCard title="Call notes settings" href="/settings/call-notes/" description="Turn sources on and off." />
+</CardGrid>

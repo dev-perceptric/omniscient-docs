@@ -1,0 +1,65 @@
+---
+title: "Claritia"
+description: "Connect Claritia, the forms and meetings app, so new leads, booked meetings and form answers flow into Omniscient and Claritia books the right rep."
+sidebar:
+  label: "Claritia"
+---
+
+import { Aside, CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
+
+Claritia builds forms and booking pages. Connected to Omniscient, it hands each new lead to your team with an opportunity and an owner, and it books meetings in your reps' real free times.
+
+## At a glance
+
+| | |
+| --- | --- |
+| **Connect** | Click **Connect** on Claritia's card in **Settings**, then **Integrations**, then **Allow** on the approve page |
+| **Who connects** | Owners and admins |
+| **Direction** | Both ways. Claritia writes leads and activity into Omniscient, and reads owners' free times. |
+| **How often** | As things happen. Each form fill or booking reaches Omniscient within seconds. |
+| **What it can do** | Contacts, accounts and opportunities; hand off new people to your team; log marketing activity; see owners' open times |
+| **Disconnect** | The disconnect icon on Claritia's card in **Settings**, then **Integrations** |
+
+## Connect Claritia
+
+<Steps>
+
+1. In Omniscient, go to **Settings**, then **Integrations**, and find **Claritia** under **Otto and Omniscient apps**.
+1. Click **Connect**. Claritia opens.
+1. Claritia sends you to Omniscient's approve page, with both logos and the list of what Claritia can do.
+1. Click **Allow**. You're back in Claritia, connected.
+
+</Steps>
+
+You can also start from Claritia: open its settings and pick Omniscient. Either way, nobody copies a key. The connection shows as a key named "Claritia" under **API keys** in **Developers**.
+
+## What flows into Omniscient
+
+| In Claritia | In Omniscient |
+| --- | --- |
+| Someone fills in a form | A person and their company, plus an open opportunity with an owner from your **Assignment** rule. The owner gets an email. |
+| Someone books a meeting | The same handoff. The meeting syncs from the rep's calendar. |
+| Form answers | Person fields that match your data model |
+| Email opens, clicks and page views | Rows in the **Marketing** card on the person |
+
+A person who already has an open opportunity from an earlier form or handoff keeps that one. No second opportunity opens.
+
+## What Claritia reads
+
+- **Owners' open times**, from the calendars Omniscient syncs, so a booking page shows only times a rep is free.
+- **Contacts, accounts and opportunities**, to route a lead to the person who already owns the company.
+
+## Disconnect
+
+In **Settings**, then **Integrations**, click the disconnect icon on Claritia's card. Omniscient asks "Disconnect Claritia?" and warns that it stops reading and writing your records. Its key and webhooks are removed. Records it made stay.
+
+<Aside type="note">
+Connecting again later replaces the old key, so only one Claritia connection is ever live.
+</Aside>
+
+## Related
+
+<CardGrid>
+  <LinkCard title="POST /leads" href="/api-reference/leads/" description="The handoff Claritia uses." />
+  <LinkCard title="Capture settings" href="/settings/capture/" description="Set who gets new leads." />
+</CardGrid>

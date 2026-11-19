@@ -1,0 +1,61 @@
+---
+title: "E-sign tools"
+description: "Connect DocuSign, Dropbox Sign, PandaDoc or Qwilr so Otto can tell you which agreements were sent, viewed and signed. Otto never writes agreement text."
+sidebar:
+  label: "E-sign tools"
+---
+
+import { Aside, CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
+
+Keep sending agreements from the e-sign tool your team already uses. Connect it to Omniscient so Otto can answer "Has Harbor Bank signed yet?" without you opening another tab.
+
+## At a glance
+
+| | |
+| --- | --- |
+| **Tools** | DocuSign, Dropbox Sign, PandaDoc, Qwilr |
+| **Connect** | The tool's card in **Settings**, then **Integrations**, then **Connect** |
+| **Who connects** | Owners and admins, once for the team |
+| **Direction** | Read only. Omniscient never writes to the tool. |
+| **How often** | When you ask Otto |
+| **What it reads** | Which documents were sent, viewed and signed |
+| **Disconnect** | The tool's card, then **Disconnect** |
+
+## Connect your e-sign tool
+
+<Steps>
+
+1. Go to **Settings**, then **Integrations**, and pick **E-sign** in the **Category** menu.
+1. Open your tool's card and click **Connect**.
+1. Sign in to the tool and approve. Dropbox Sign, PandaDoc and Qwilr ask for an API key on their own sign-in page.
+
+</Steps>
+
+## Ask Otto
+
+Once connected, ask in **Ask Otto**:
+
+- "Which agreements in PandaDoc are still waiting on a signature?"
+- "When did Lumen Health sign in DocuSign?"
+- "List the Qwilr quotes viewed this week."
+
+Otto looks them up and answers with what the tool says.
+
+## What Otto won't do
+
+- Write, draft, rewrite or suggest the words of an agreement.
+- Send, void or change a document in the tool.
+- Fill in or make a template.
+
+To pull facts out of a contract you already have, like its term, renewal date or notice period, use the **Pull contract terms** skill in Ask Otto. See [Skills and knowledge](/otto/skills-and-knowledge/).
+
+<Aside type="note">
+Omniscient has no contracts screen in the CRM. Signing and review pages your buyers already got from Omniscient keep working.
+</Aside>
+
+## Related
+
+<CardGrid>
+  <LinkCard title="The app store" href="/integrations/app-store/" description="Every app you can connect." />
+  <LinkCard title="Ask Otto" href="/otto/ask-otto/" description="Ask about your deals." />
+</CardGrid>

@@ -1,0 +1,60 @@
+---
+title: "Attio"
+description: "Import companies, people, deals with their stages, and notes from Attio into Omniscient."
+sidebar:
+  label: "Attio"
+---
+
+import { CardGrid, LinkCard, Steps } from '@astrojs/starlight/components';
+
+Copy your Attio workspace into Omniscient. Omniscient reads your records once per import and never writes to Attio.
+
+## At a glance
+
+| | |
+| --- | --- |
+| **Connect** | **Settings**, then **Imports**, then **Attio**, then **Connect Attio** |
+| **Who connects** | Owners and admins |
+| **What comes over** | Companies, people, the deal stages, deals and notes |
+| **Direction** | Attio into Omniscient, one time per import |
+| **How often** | When you click **Import** |
+| **What it asks for** | Read access to records, notes and workspace members |
+| **Disconnect** | Attio's card in **Settings**, then **Integrations** |
+
+## Import from Attio
+
+<Steps>
+
+1. Go to **Settings**, then **Imports**, and pick **Attio**.
+1. Click **Connect Attio**, sign in and approve access.
+1. The import runs: companies, people, pipelines, opportunities, then notes.
+1. When it says **Finished**, check your records.
+
+</Steps>
+
+## What comes over
+
+| In Attio | In Omniscient |
+| --- | --- |
+| Companies | Companies, matched by their domain |
+| People | People, linked to their company |
+| Deal stages | Stages in one pipeline. A stage with a celebration turned on becomes a won stage, and a stage named like "Lost" or "Churned" becomes a lost one. |
+| Deals | Opportunities with name, amount, close date, stage and owner |
+| Notes | Notes on the matching record |
+
+Deal owners are matched by email to workspace members. Attio lists stay in Attio.
+
+## Without one-click sign-in
+
+If Attio sign-in isn't set up on your server, paste an access token instead. Make one in Attio under **Workspace settings**, then **Developers**, with read access to records, notes and workspace members.
+
+## Disconnect
+
+Click **Disconnect** on Attio's card in **Settings**, then **Integrations**. Imported records stay.
+
+## Related
+
+<CardGrid>
+  <LinkCard title="CRM imports" href="/integrations/crm-imports/" description="All four imports side by side." />
+  <LinkCard title="Data model" href="/crm/data-model/" description="Add fields you had in Attio." />
+</CardGrid>
