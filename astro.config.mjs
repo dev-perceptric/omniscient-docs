@@ -18,6 +18,8 @@ export default defineConfig({
         { tag: 'link', attrs: { rel: 'preconnect', href: 'https://fonts.googleapis.com' } },
         { tag: 'link', attrs: { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: true } },
         { tag: 'link', attrs: { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap' } },
+        // Walkthrough clips stay still for people who ask for less motion; they get the controls instead.
+        { tag: 'script', content: "addEventListener('DOMContentLoaded',()=>{if(matchMedia('(prefers-reduced-motion: reduce)').matches)for(const v of document.querySelectorAll('video.clip')){v.removeAttribute('autoplay');v.pause();v.controls=true;}});" },
       ],
       sidebar: [
         { label: 'Get started', items: ['index', ...['create-your-workspace', 'connect-your-inbox', 'import-your-data', 'invite-your-team', 'your-first-week', 'the-interface'].map((p) => `get-started/${p}`)] },

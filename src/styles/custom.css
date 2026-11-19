@@ -210,3 +210,6 @@ starlight-tabs [role='tab'][aria-selected='true'] { color: var(--sl-color-white)
 .sl-markdown-content .shot-400 img { max-width: min(100%, 400px); }
 .sl-markdown-content .shot-500 img { max-width: min(100%, 500px); }
 .sl-markdown-content .shot-640 img { max-width: min(100%, 640px); }
+
+/* Walkthrough clips: short muted loops, framed like the screenshots. */
+.sl-markdown-content video.clip { display: block; width: 100%; height: auto; margin-block: 1.25rem; border-radius: var(--om-radius); box-shadow: var(--om-ring); background: var(--om-panel); }
