@@ -1,0 +1,361 @@
+---
+title: "Error messages"
+description: "Every error message Omniscient can show, grouped by area, with what it means and how to fix it: sign-in, team, billing, mail sync, Otto, workflows, imports, integrations and more."
+sidebar:
+  label: "Error messages"
+---
+
+import { Aside, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+This page lists the messages Omniscient shows when something can't be done. Find the words you saw with your browser's search (<kbd>⌘</kbd> <kbd>F</kbd> or <kbd>Ctrl</kbd> <kbd>F</kbd>). Names in *italics* stand for the real name, email or number in your message.
+
+## How errors work in Omniscient
+
+- **Hiccups retry on their own.** A timeout, a busy server or a dropped connection is tried again with growing waits. You don't see a message unless every try fails.
+- **What's left shows as one line with Retry.** At the bottom of the screen you see a short line like "Couldn't save Amount" and a **Retry** button. Click it to try again.
+- **Big jobs never stop for one bad row.** When you save, delete or import many records, a batch that fails is split so the rest still go through. The line then says how many couldn't be saved.
+- **You never see raw database text.** Anything meant only for developers becomes "Something went wrong. Try again."
+
+## Messages you can see anywhere
+
+| Message | What it means | How to fix it |
+| --- | --- | --- |
+| Something went wrong. Try again. | An error Omniscient couldn't put into plain words | Click **Retry** or do it again. If it keeps happening, reload the page. |
+| We couldn't reach the server. Check your connection and try again. | Your browser lost its connection | Check your Wi-Fi or VPN, then try again |
+| Couldn't save *field* | A change didn't save after several tries | Click **Retry** on the line |
+| Couldn't delete. Try again. | A delete didn't go through | Click **Retry** |
+| Please sign in again. | Your session ended | Sign in again. You come back to the same page. |
+| You are not in this workspace. | You were removed, or the link is for another workspace | Switch workspace from the menu, or ask an admin to invite you |
+| *Page* couldn't load. The rest of Omniscient still works. | One screen broke. The rest of the app keeps working. | Click **Try again** or **Reload**. If it keeps happening, click **Copy details** and send them to support. |
+
+## Sign-in and your account
+
+| Message | What it means | How to fix it |
+| --- | --- | --- |
+| Enter your email. | The email box is empty | Type your email |
+| That email doesn't look right. | The email has a typo | Check for a missing `@` or dot |
+| Enter your password. | The password box is empty | Type your password, or use **Use a code instead** |
+| That email and password don't match. | Wrong password, or a different email | Try again, or click **Forgot password?** |
+| That email already has an account. Sign in instead. | You tried to sign up with an email that's in use | Sign in with that email |
+| Confirm your email first. Use the code we sent you. | Your new account isn't confirmed | Type the code from the email |
+| That code didn't work. Check it or send a new one. | The code was wrong or expired | Send a new code and type it within a few minutes |
+| Too many sign-in emails. Try again in *12 minutes*. | More than 5 sign-in emails to one address in an hour | Wait, or sign in another way |
+| Too many password tries. Try again in *12 minutes*. | More than 10 wrong passwords in an hour | Wait, or reset your password |
+| Too many wrong codes. Send a new one. | 5 wrong codes in 15 minutes | Click to send a new code |
+| Too many reset emails. Try again in *12 minutes*. | More than 3 reset emails in an hour | Check your spam folder for the last one |
+| Too many tries in a short time. Wait a minute and try again. | Too many tries from your network | Wait a minute |
+| Wait for the security check to finish, then try again. | The bot check is still running | Wait a second and click again |
+| The security check didn't pass. Try again. | The bot check failed | Reload the page. Turn off any extension that blocks scripts. |
+| That password showed up in a data leak. Pick another one. | Your new password is on a list of leaked passwords | Pick a password you use nowhere else |
+| Use at least 10 characters. | The password is too short | Make it longer |
+| Pick a password you haven't used here. | The new password is the same as the old one | Pick another |
+| Confirm it's you with the code we emailed, then try again. | A security change needs a fresh check | Type the code from the email |
+| Finish two-step verification first. | Your account or workspace needs two-step | Type the code from your authenticator app, a passkey or a backup code |
+| Your workspace asks everyone to use an authenticator app. | An admin turned on two-step for everyone | Set up an authenticator app on the screen shown |
+| Single sign-on isn't set up for this domain yet. | You picked SSO but your company hasn't set it up | Ask your admin, or sign in another way |
+| This sign-in option isn't turned on yet. Use Google or email for now. | That sign-in button isn't available on this server | Use Google or email |
+| Sign-ups are closed for this address. | Your company only lets people in through SSO, or by invite | Ask your admin to invite you |
+| You can't join this workspace | Your email isn't allowed to join it | Ask an admin for an invite |
+| That invite link has expired | Invite links last a set number of days | Ask an admin for a new link |
+| That code doesn't look right. / That code didn't work. Check it or use another one. | A backup code was mistyped or already used | Each backup code works once. Use another. |
+| That passkey request expired. Try again. | You waited too long | Try again |
+| That passkey couldn't be checked. Try again. | Your device didn't finish the passkey check | Try again, or use another way in |
+| That passkey isn't on any Omniscient account. | The passkey was deleted, or is for another site | Sign in another way and add a new passkey |
+| You have no passkeys yet. | You picked passkey before adding one | Add one in **Settings**, then **Security** |
+| Add an email to your account first. | A passkey needs an account email | Add an email in **Settings**, then **Account** |
+| Type the number with its country code, like +1 415 555 0100. | The phone number for text codes is missing its country code | Add `+` and the country code |
+| That isn't your email. | You typed a different email to confirm deleting your account | Type your own email exactly |
+| Confirm the change from both *old email* and *new email* | An email change needs both addresses to agree | Click the link sent to each address |
+| Keep at least one way in. | You tried to turn off every sign-in option | Leave at least one on |
+| Turn on two-step verification for yourself first | Admins can only ask everyone for two-step once they use it | Set up two-step in **Settings**, then **Security** |
+| Set up single sign-on before making it the only way in | **Only SSO** needs working SSO | Finish SSO setup first |
+| Another workspace already owns that domain | A domain can belong to one workspace | Use another domain, or contact support |
+| Use your company's own domain | Free mail domains like gmail.com can't be verified | Add your work domain |
+
+## Team and roles
+
+| Message | What it means | How to fix it |
+| --- | --- | --- |
+| Only owners and admins can invite people. | Members can't invite | Ask an admin, or ask for the Admin role |
+| Only owners and admins can make invite links | The same, for invite links | Ask an admin |
+| Only owners and admins can remove people. | Members can't remove people | Ask an admin |
+| Only owners and admins can change roles | Members can't change roles | Ask an admin |
+| Only owners and admins can change seats | Members can't change Seller or Free seats | Ask an admin |
+| The owner can't be removed. | The owner can't leave | The owner hands the workspace to someone else first |
+| The owner's role can't be changed | The same | Hand the workspace over first |
+| Only the owner can do this / Only the owner can do this to the owner | Only the owner can change the owner | Ask the owner |
+| That person isn't on the team. | They already left or were removed | Reload **Members** |
+| That invite isn't open. | The invite was used or taken back | Send a new invite |
+| Couldn't send the invite email. Try again. / Couldn't email *address* | The invite email didn't go out | Click **Retry**, or copy an invite link instead |
+| Only owners and admins can rename the workspace | Members can't rename it | Ask an admin |
+| Only owners and admins can change the company logo / domain | The same, for the logo and domain | Ask an admin |
+| Type your website, like acme.com | The website box can't be read | Type just the domain |
+| Only the workspace owner can delete it. | Only the owner deletes a workspace | Ask the owner |
+| The name didn't match, so nothing was deleted. / Type the workspace name exactly to delete it. | The name you typed was different | Type the name exactly as shown |
+
+## Plans and billing
+
+| Message | What it means | How to fix it |
+| --- | --- | --- |
+| Only owners and admins can change the plan. / Only owners and admins can manage billing. | Members can't change billing | Ask an admin |
+| This workspace already has a plan. Use Manage billing to change it. | You tried to buy a second plan | Click **Manage billing** |
+| No billing account yet. Pick a plan first. | **Manage billing** needs a plan | Choose a plan first |
+| Free seats come with Pro and Business | Free seats need Pro or Business | Upgrade, or make the person a Seller seat |
+| A workspace needs at least one seller seat | Everyone can't be on a Free seat | Keep one Seller seat |
+| Your plan includes *5* agents | You reached your plan's agent limit | Remove one, or upgrade |
+| Plan updated. It can take a minute to show here. | Payment went through. This is good news. | Wait a minute and reload |
+| Payment failed | The last charge didn't go through | Click **Manage billing** and update your card |
+
+## Mail, calendar and sync
+
+| Message | What it means | How to fix it |
+| --- | --- | --- |
+| Your email and calendar (*address*) stopped syncing. | A mailbox lost its connection. The banner shows on every page. | Click **Reconnect** on the banner and sign in again. **Hide for today** hides it. |
+| Sync failed | A sync failed. Omniscient waits longer before each new try: 5 minutes, then 10, 20, up to 6 hours. | Usually nothing. If it stays, click **Reconnect** next to the mailbox. |
+| Connect again | The tag on a mailbox whose sign-in expired or was taken back | Click **Reconnect** next to the mailbox and sign in again |
+| Waiting for first sync | Normal for a new mailbox | Wait. The first sync can take a while for a big inbox. |
+| Enter an email address. / Enter the password. | A box in **Connect other mail** is empty | Fill it in |
+| Check the server names and ports. | Omniscient couldn't sign in to your mail server | Check the IMAP and SMTP servers and ports with your provider. Many need an app password. |
+| Could not check this address. | Omniscient couldn't work out your mail provider | Pick your provider by hand, or enter the servers |
+| *domain* has no mail server. | That domain doesn't receive mail | Check the email for typos |
+| Too many tries. Wait a few minutes. | Too many sign-in tries to your mail server | Wait, then try again |
+| This address is already connected. / A teammate already connected this address. | A mailbox can be connected once per workspace | Use the connection that's there |
+| Only the person who connected this inbox, or an admin, can disconnect it. | Members can't disconnect someone else's mailbox | Ask them or an admin |
+| Only the person who connected an inbox can change its sharing | Only the mailbox's owner picks its sharing | Ask them |
+| Google sign-in failed: … / Microsoft sign-in failed: … | The sign-in page sent back an error | Try again. Your company may need to allow Omniscient in Google Workspace or Microsoft Entra. |
+
+## Sending email and drafts
+
+| Message | What it means | How to fix it |
+| --- | --- | --- |
+| Pick an inbox to send from. | No **From** mailbox | Pick one |
+| Add someone to send to. | No **To** | Add an email |
+| Send to 20 people at most. | Too many recipients | Send in smaller groups |
+| Write a message first. | The message is empty | Write something |
+| That inbox isn't connected. / That inbox isn't connected anymore. | The mailbox was disconnected | Connect it again in **Settings**, then **Mail & calendar** |
+| Only the inbox owner can send from this inbox. / You can only send from your own inbox. | You can't send from a teammate's mailbox | Send from your own |
+| Allow sending for *address*. | The mailbox was connected to read only | Click the button and allow sending |
+| You've reached today's limit of 200 emails. | Each person can send 200 emails a day from Omniscient | Wait until tomorrow, or send from your mail app |
+| You've hit today's limit of 40 drafts. | Otto writes up to 40 reply drafts per person a day | Wait until tomorrow |
+| You can only draft replies from your own inbox. | Otto drafts replies only to mail in your mailbox | Open the email from your own mailbox |
+| That thread is gone from your inbox. | The thread was deleted in Gmail or Outlook | Nothing to reply to |
+| Email not found. | The email was removed | Reload the page |
+| The AI couldn't write this one. Try again. | The draft didn't come out | Try again |
+| The email didn't send. | Gmail or Outlook refused it | Click **Retry**. If it keeps failing, connect the mailbox again. |
+| Connect *address* again. / Connect *address* again to send | The mailbox's sign-in expired | Connect it again |
+
+## Meetings and call notes
+
+| Message | What it means | How to fix it |
+| --- | --- | --- |
+| Give the meeting a title and a time. | **New meeting** needs both | Fill them in |
+| Pick an account, or add an attendee from one. | The meeting isn't linked to a company | Pick a company or add someone from one |
+| You can add notes only to meetings on your own calendar. | You can't upload a recording for a teammate's meeting | Ask them to upload it |
+| Pick a recording first. | No file picked | Pick an audio or video file |
+| Upload an audio or video file. | The file isn't audio or video | Upload an mp3, m4a, mp4 or similar |
+| That file is over 500 MB. Upload a shorter recording or the audio only. | The recording is too big | Upload the audio only |
+| No speech found in that recording. | The recording is silent or can't be heard | Check the file plays |
+| That transcript looks empty. Paste the full text, or upload a .txt, .vtt or .srt file. | The transcript has no text | Paste the text, or upload a transcript file |
+| The transcript is empty. | The call's transcript had no words | Check the call was recorded with transcripts on |
+| Your Zoom (*address*) stopped syncing, so calls get no notes. | Zoom lost its connection | Connect Zoom again in **Settings**, then **Call notes** |
+| Zoom account not found. | The Zoom connection is already gone | Reload the page |
+| Zoom did not share your email. Try again. | Zoom's sign-in didn't send your email | Try again, and allow the email permission |
+
+## Records, lists and views
+
+| Message | What it means | How to fix it |
+| --- | --- | --- |
+| *3* of these couldn't be deleted. They belong to someone else's private inbox or note. | Some records come from a private mailbox | Ask the mailbox owner to delete them |
+| Delete up to 1,000 at a time / Edit up to 1,000 at a time | A bulk action has a limit | Select fewer rows |
+| Enter a valid value | A value in **Bulk edit** doesn't fit the field | Check the field's type, like a number or a date |
+| Another record already has *field* "*value*" | That field must be different on every record | Use another value, or merge the two records |
+| Two or more records share "*value*" in *field*. Make them different first. | You tried to make a field unique, but values repeat | Change the repeats first |
+| Pick two different records | You tried to merge a record with itself | Pick another record |
+| Only companies and people can be merged | Opportunities can't be merged | Delete the extra opportunity |
+| Name can't be empty | A record needs a name | Type a name |
+| Give the opportunity a name | A new opportunity needs a name | Type a name |
+| That value is too long | A text field has a length limit | Make it shorter |
+| Couldn't add the pipeline / Couldn't save the stages / Couldn't delete the pipeline | A pipeline change didn't save | Click **Retry** |
+| Filter groups go three deep at most / Use up to 10 conditions | A filter is too complex | Make it simpler, or split it into two views |
+| Link copied / Couldn't copy the link | Copying the record's link worked, or your browser blocked it | Copy the address bar instead |
+| Couldn't add *name* to favorites / Couldn't save the order of your favorites | A favorite didn't save | Click **Retry** |
+
+## Data model
+
+| Message | What it means | How to fix it |
+| --- | --- | --- |
+| Only owners and admins can change objects | Members can't change the data model | Ask an admin |
+| A workspace can have up to 50 objects | You reached the limit | Delete an object you don't use |
+| Give the object a name / Give the field a name | The name is empty | Type a name |
+| Add at least one choice | A choice field needs options | Add one |
+| Name both sides / Name the field on the other object | A relationship needs a name at each end | Fill in both names |
+| Pick the object to link to / Pick the relation type | A relationship setting is missing | Pick one |
+| A field can't become a relation. Make a new one. | Types can't change into a relationship | Make a new relationship field |
+| A calculated field can't change type. Make a new one. | Formulas and rollups keep their type | Make a new field |
+| A relation can't change type / A relation's object can't change. Make a new one. | A relationship keeps its shape | Make a new one |
+| *Field* is used by a formula or rollup, so its type can't change | Another field depends on it | Change the formula or rollup first |
+| This would make the field depend on itself | A formula refers to itself | Change the formula |
+| A formula can only use fields of its own object | Formulas read one object | Use a rollup to read related records |
+| The formula uses a field that was deleted / The rollup uses a field that was deleted | A field it needed is gone | Edit the formula or rollup |
+| Write a formula / The formula is too long | The formula is empty or too long | Fix the formula |
+| Only admins can change which screens the workspace has | Members can't change screens | Ask an admin |
+| This object was deleted. / This field was deleted. | Someone deleted it while you had it open | Go back to **Data model** |
+
+## Import and export
+
+| Message | What it means | How to fix it |
+| --- | --- | --- |
+| Only owners and admins can import. | Members can't import from other CRMs | Ask an admin |
+| An import is already running. Wait for it to finish. | One import at a time | Wait for the first to finish in **Settings**, then **Imports** |
+| The import's sign-in is gone. Start it again. | The connection to the other CRM ended | Start the import again |
+| Salesforce did not return a refresh token. Allow offline access on the connected app. | Salesforce's app settings block long sign-ins | Ask your Salesforce admin to allow offline access |
+| *HubSpot* sign-in isn't set up yet. / Paste the API token. | One-click sign-in isn't available for that CRM on this server | Use the token box shown under it |
+| Import at most 2,000 rows at a time | A CSV import is too big | Split the file |
+| Only the person who sent this file can import it. | An import card in Ask Otto belongs to its sender | Send the file yourself |
+| This import already ran. / There's nothing to undo. | The import is done, or was already undone | Nothing to do |
+| That import is gone. | The import card expired | Drop the file in again |
+| Couldn't undo it: … | The undo didn't finish | Try **Undo** again |
+
+## Trash
+
+| Message | What it means | How to fix it |
+| --- | --- | --- |
+| Couldn't load Trash. Try again. | Trash didn't load | Click **Retry** |
+| Not restored: another record already has the same domain, email or unique field | A newer record took its email, domain or unique value | Change or merge the newer record, then restore |
+| *2 records* weren't restored | Something else stopped the restore | Click **Retry** |
+| Restore up to 1,000 at a time | Too many selected | Select fewer |
+
+## Otto
+
+| Message | What it means | How to fix it |
+| --- | --- | --- |
+| Ask a question. | The box is empty | Type a question |
+| The connection dropped. Otto keeps working: open it again from Recent. | Your browser lost the live answer | Open the chat from **Recent** under Ask Otto |
+| *file* couldn't be opened. / That file couldn't be opened. Try again. | The file is damaged or a type Otto can't read | Save it as PDF, Word or CSV and try again |
+| *file* is empty. | The file has no content | Check the file |
+| *file* is over 10 MB. | PDFs and Word files can be up to 10 MB | Make it smaller, or send only the pages you need |
+| *file* has no text to read. It looks like a scan. | A scanned PDF has pictures, not text | Use a PDF with real text |
+| That file isn't available any more. Ask Otto to make it again. | A file Otto made has expired | Ask again |
+| Couldn't save the *note* / Saved *8*, *2* couldn't be saved | A confirm card saved only part | Click **Retry** on the line |
+| Only owners and admins can save a Workspace skill. | Members can save personal skills only | Save it as Personal, or ask an admin |
+| Not saved: … | A skill file has a problem, like a missing description | Fix what the line says |
+| Couldn't add the skill / Couldn't add the document | A new skill or Knowledge doc didn't save | Click **Retry** |
+| Couldn't delete the chat. | Deleting a chat didn't go through | Click **Retry** |
+| Today's 40 page reads are used. It resets tomorrow. | Otto reads up to 40 web pages per person a day | Wait until tomorrow |
+| LinkedIn is never read. | Otto never reads LinkedIn pages | Save the person with the Chrome extension instead |
+| Only public web pages can be read. / Give a full address that starts with https:// | Otto reads public `https` pages only | Use a public address |
+| The site reader didn't answer. Try again in a minute. | The site took too long | Try again |
+| That's *1,200* records. Narrow it to 500 or fewer with filters. | **Sort and score records** scores up to 500 at once | Add filters |
+| No records match. | The filter matched nothing | Change the filter |
+| *Field* isn't a text or picklist field, so outcomes can't be saved in it. | Scores save into text or choice fields | Pick another field |
+| Couldn't run it in *app* | An action in a connected app failed | Check the app is still connected in **Settings**, then **Integrations** |
+| *App* isn't connected. It's connected in Settings, Integrations. | Otto needs that app connected | Connect it |
+
+## Find leads and email finding
+
+| Message | What it means | How to fix it |
+| --- | --- | --- |
+| Today's enrichment allowance is unavailable or exhausted. / Today's allowance is used up | Your daily credits are spent | Wait until tomorrow. See [credits](/workspace/plan-limits/#credits). |
+| Not enough credits: *5* left, *10* needed | Not enough credits for this lookup | Wait until tomorrow |
+| Pick someone first. | **Find email** needs people selected | Select people |
+| Up to 25 people at a time. | **Find email** runs on 25 at once | Select fewer |
+| No email found | No work email could be found | Try again later, or add it by hand |
+| Email finding isn't set up yet. / Phone finding isn't set up yet. / People search isn't set up yet. | That lookup isn't turned on for this server | Contact support |
+| Email lookup failed. Try again later. / Phone lookup failed. Try again later. | The data service had a problem | Try again later. Your credits came back. |
+
+## Workflows
+
+| Message | What it means | How to fix it |
+| --- | --- | --- |
+| Describe the workflow. / Say what to change. | The box for Otto is empty | Type what the workflow should do |
+| Couldn't draft that. Try saying it another way. | Otto couldn't turn your words into steps | Say it more simply, or start from a playbook |
+| Today's limit for drafting workflows is used up. | Otto drafts or changes up to 40 workflows per person a day | Wait until tomorrow, or build it by hand |
+| A workflow can have up to 50 steps. / Up to 40 steps. | The workflow is too long. Workflows Otto drafts hold up to 40 steps. | Split it into two workflows |
+| Branches can go *3* levels deep. | Too many branches inside branches | Make it flatter |
+| Add a step first / Add at least one step | A workflow needs a step | Add one |
+| Pick a record to test on. / That record is gone. | **Test** needs a record that still exists | Pick another record |
+| Publish the workflow first / Turn the workflow on first | The action needs a live workflow | Click **Publish** |
+| Someone else changed this workflow | A teammate saved a change while you edited | Reload and make your change again |
+| This workflow was deleted. | Someone deleted it | Go back to **Workflows** |
+| Today's agent limit is used up. / Today's agent limit for this workflow's owner is used up. Retry tomorrow. | AI steps run up to 100 times per owner a day | Retry the run tomorrow from **Runs** |
+| Today's agent limit is used up, so agents didn't run. | A test skipped its AI steps | Test again tomorrow |
+| Couldn't retry this run. Try again. / Only a failed run can be retried | **Retry** works on failed runs | Pick a run that failed |
+| Picked up again at the failed step | The retry started. This is good news. | Nothing |
+| Approval not found. / Already decided. / This is assigned to someone else. | The approval was handled or isn't yours | Reload the page |
+| The record changed since this was suggested. It's now *value*. | The value changed after the step suggested it | Check the record, then decide |
+| Connect Slack in Settings first. | A Slack step needs Slack connected | Connect Slack in **Settings**, then **Integrations** |
+| The address answered *500*. | A **Send to webhooks** step got an error from your address | Check your server |
+| They unsubscribed, so this run can't go on. | The person clicked unsubscribe | Nothing. The run stops for them. |
+| This email may have gone already, so it won't be sent again. | Omniscient can't tell if the email went out, so it won't risk sending twice | Check your Sent folder |
+| You've hit today's limit of 60 drafts. | Otto writes up to 60 workflow emails per person a day | Wait until tomorrow |
+
+## Integrations
+
+| Message | What it means | How to fix it |
+| --- | --- | --- |
+| Only owners and admins can connect the team's apps. | Members can connect apps only for themselves | Ask an admin to connect it for the team |
+| Only owners and admins can connect Slack. / Only owners and admins can pick the channel. | Slack is set up for the whole team | Ask an admin |
+| Couldn't connect the app / Couldn't open *app* | The sign-in page didn't open or finish | Try again, and allow pop-ups for Omniscient |
+| Couldn't disconnect *app* | The disconnect didn't go through | Click **Retry** |
+| The channels didn't load / Couldn't save the channel | Slack didn't answer | Try again |
+| Salesforce didn't say where the org lives. Connect it again. | Salesforce's sign-in was incomplete | Connect again |
+| Slack isn't set up yet. | Slack isn't available on this server | Contact support |
+| Only owners and admins can connect apps. | Connecting Claritia, Arrowsterr or an AI app needs an admin | Ask an admin to click **Allow** |
+| This connection link isn't valid. Start again from the other app. | The approve page's link is broken or old | Start again from the other app |
+| Unknown app or return address. Start again from the app. / This app isn't registered. | The AI app's connection is out of date | Remove and add the connector again in your AI app |
+
+## Chrome extension
+
+| Message | What it means | How to fix it |
+| --- | --- | --- |
+| Connect the extension again from Settings. / Connect this browser again from Settings to see records here. | The extension's sign-in ended | Open **Settings**, then **Chrome extension**, and connect again |
+| Add the Omniscient extension to Chrome, then reload this page | The page can't find the extension | Install it, then reload |
+| No one to save on this page. | The page has no person or list the extension can read | Open a profile, a search or a company's People tab |
+| Up to 10 people a click. | The extension saves 10 at a click | Click again for the next 10 |
+| No company on this page. / Open the company's website or its LinkedIn page with a website to save it. | The extension can't tell which company this is | Open the company's page |
+| Save this person first. | You tried to add a note or template before saving | Click **Save** first |
+| Someone else in Omniscient has that email. | Another person already has this email | Open that person instead |
+| Only the person who wrote a note can change it. / … delete it. | Notes belong to their author | Ask the author |
+| Write something first. / Name the opportunity. | A box is empty | Fill it in |
+| Pick a workflow. | **Add to workflow** needs a workflow | Pick one |
+| Only owners and admins can change this. | The extension's LinkedIn fields are admin-only | Ask an admin |
+
+## Capture forms
+
+| Message | What it means | How to fix it |
+| --- | --- | --- |
+| Add a name. | The form needs a name | Type one |
+| The page after sending must start with https:// | The thank-you address isn't `https` | Use an `https` address |
+| Add a valid email. | A visitor sent the form without a real email | Nothing to fix. The visitor sees the line. |
+| *Field* is required. | A required field was empty | The visitor fills it in |
+| This form doesn't exist. | The form was deleted, turned off or got a new address | Use the new link or address |
+| Too many submissions. Try again in a few minutes. | More than 10 posts from one visitor in 10 minutes | Wait |
+
+## Developers
+
+The REST API, webhooks and MCP server answer with codes and plain messages. Each endpoint page lists its own:
+
+- [API errors by status](/api-reference/#errors), [key errors](/api-reference/authentication/#key-errors-on-every-endpoint) and [OAuth errors](/api-reference/authentication/#oauth-for-mcp-clients)
+- [Webhook address errors](/api-reference/webhook-subscriptions/#errors)
+- [MCP tool errors](/api-reference/mcp-tools/#update_record)
+
+In the app, under **Settings**, then **Integrations**, then **Developers**:
+
+| Message | What it means | How to fix it |
+| --- | --- | --- |
+| Only owners and admins can manage the API. | Members can't make keys or webhooks | Ask an admin |
+| Pick at least one event. | A webhook needs events | Tick one or more |
+| That webhook is gone. | It was deleted | Reload the page |
+| Failing | The webhook's address keeps failing | Check your server answers `2xx` within 10 seconds |
+| Couldn't finish that. Try again. | A key or webhook change didn't go through | Click **Retry** |
+
+<Aside type="tip">
+Don't see your message? Note the exact words and what you clicked, then email [hello@tryomniscient.com](mailto:hello@tryomniscient.com).
+</Aside>
+
+## Related
+
+<CardGrid>
+  <LinkCard title="Troubleshooting" href="/reference/troubleshooting/" description="Fixes for common problems." />
+  <LinkCard title="Plan limits" href="/workspace/plan-limits/" description="Every limit in one place." />
+</CardGrid>
