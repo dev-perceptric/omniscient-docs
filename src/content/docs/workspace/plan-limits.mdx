@@ -1,0 +1,173 @@
+---
+title: "Plan limits"
+description: "Every Omniscient plan, price, seat type, credit allowance and limit in one place: per plan, per person, per workspace and per API key."
+sidebar:
+  label: "Plan limits"
+---
+
+import { Aside, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+This page lists the plans, what they cost, and every limit the app holds you to. A value marked "check" couldn't be confirmed in the product itself. Ask us before you rely on it.
+
+## Plans and prices
+
+Prices are per seat per month, in US dollars.
+
+| | Free | Starter | Pro | Business |
+| --- | --- | --- | --- | --- |
+| Billed yearly | $0 | $19 | $49 | $99 |
+| Billed monthly | $0 | $23 | $59 | $119 |
+| Yearly charge per seat | $0 | $228 | $588 | $1,188 |
+| Free trial | | | 14 days, no card | |
+
+Yearly plans are charged once a year. When you add or remove a Seller seat, Stripe charges or credits the difference for the rest of the period.
+
+### What each plan includes
+
+These are the lines on each plan card in **Settings**, then **Plans & billing**.
+
+| | Starter | Pro | Business |
+| --- | --- | --- | --- |
+| Meeting notes and drafts | Yes | Yes | Yes |
+| Pipeline board and forecast | — | Yes | Yes |
+| Fields filled by rules | — | Yes | Yes |
+| Prep briefs and field packs | — | Yes | Yes |
+| Free teammate seats | — | Yes | Yes |
+| Manager mode and coaching | — | — | Yes |
+| MEDDIC from every call | — | — | Yes |
+| Admin controls | — | — | Yes |
+| Agents | 2 | 5 | 15 |
+
+Free has none of the lines above and 0 agents.
+
+### What the app checks today
+
+Most plan lines are not locked in the app yet. These are:
+
+| Feature | Lowest plan | What happens on a lower plan |
+| --- | --- | --- |
+| Kanban board on Companies, People and Opportunities | Pro | Picking **Kanban** opens **Plans & billing** |
+| Free seats | Pro | The seat menu doesn't show. The database answers "Free seats come with Pro and Business". |
+| Agents | Starter (2), Pro (5), Business (15) | Adding one more answers "Your plan includes 5 agents" |
+
+The plan rules in the app's code also name Ask Otto, meetings and drafts as Starter features, and field rules and prep as Pro features. They are not locked yet: check.
+
+### Team discounts
+
+| Seats | Discount |
+| --- | --- |
+| 21 to 50 | 10% off (check) |
+| 51 to 100 | 20% off (check) |
+| More than 100 | Custom (check) |
+
+## Seats
+
+| Seat | Billed | Who it's for |
+| --- | --- | --- |
+| **Seller** | Yes, at the plan's price | People who work deals |
+| **Free** | Never | Teammates who only view records or log their own email and meetings. Pro and Business only. |
+
+Only Seller seats count toward your bill. Owners and admins set seats in **Settings**, then **Members**.
+
+## When the trial ends
+
+| State | Plan in force |
+| --- | --- |
+| Trial running | Pro, with a **Trial** tag and the days left |
+| Paid, active, or payment past due | The plan you pay for |
+| Trial over, no plan | Free. Your data stays. |
+
+## Credits
+
+Finding leads and filling in contact details use credits. Each person has their own daily allowance. It resets each day.
+
+| What | Credits |
+| --- | --- |
+| Daily allowance per person | 1,000 (the server's default) |
+| Each lead row Otto asks for | 1 |
+| Each email or phone lookup, in the app, Otto or the Chrome extension | 10 |
+| A person who already has an email | 0 |
+| Lead plans Otto can make per person per day | 60 |
+
+A lookup that fails gives its credits back. When the day's credits run out, you see "Today's enrichment allowance is unavailable or exhausted." Credits aren't tied to a plan: check with us before you plan around a higher allowance.
+
+## Workspace limits
+
+| Limit | Value |
+| --- | --- |
+| Custom objects per workspace | 50 |
+| Records deleted at once | 1,000 |
+| Days a record stays in Trash | 30 |
+| File on a record | 25 MB |
+| Call recording you upload | 500 MB |
+| Recipients on one email you send | 20 |
+| People in one **Find email** run | 25 |
+| Saved view: filter rules | 30, nested 3 deep |
+| Saved view: sorts | 5 |
+
+## Otto limits
+
+| Limit | Value |
+| --- | --- |
+| Files on one message | 5 |
+| A PDF or Word file | 10 MB |
+| Another file | 512 KB |
+| A CSV or spreadsheet to import | 4 MB |
+| Rows in one import | 5,000 |
+| Columns in one import | 150 |
+| Records scored at once with **Sort and score records** | 500 |
+| Rows Otto reads into a report | 5,000, from up to 4 tables |
+| Files in one skill | 12 |
+| Characters in one skill file | 40,000 |
+| Characters in a skill's description | 1,000 |
+| New fields when Otto sets up your industry | 5 |
+
+## Chrome extension limits
+
+| Limit | Value |
+| --- | --- |
+| People saved in one click | 10 |
+
+## Capture limits
+
+| Limit | Value |
+| --- | --- |
+| Posts from one visitor | 10 in 10 minutes |
+| Size of one post | 50 KB |
+| Fields read from one post | 60 |
+
+## API limits
+
+| Limit | Value |
+| --- | --- |
+| Requests per key | 600 a minute |
+| Request body | 100 KB |
+| Rows per page | 100 |
+| Webhooks per key | 10 |
+| Free times in one call | 14 days, up to 50 times |
+| Messages in one MCP batch | 20 |
+| Changes in one MCP `update_record` | 20 |
+
+## Sign-in limits
+
+These stop people from guessing passwords. Each counts per email address and per network address.
+
+| Try | Per email | Per network address |
+| --- | --- | --- |
+| Sign-in emails | 5 an hour | 20 an hour |
+| Password tries | 10 an hour | 30 an hour |
+| Wrong codes | 5 in 15 minutes, then that code is done | 30 an hour |
+| Reset emails | 3 an hour | 10 an hour |
+
+Past a limit, you see a line like "Too many sign-in emails. Try again in 12 minutes."
+
+<Aside type="tip">
+Need more of something on this page? Email [hello@tryomniscient.com](mailto:hello@tryomniscient.com) with what you need and why.
+</Aside>
+
+## Related
+
+<CardGrid>
+  <LinkCard title="Plans and billing" href="/workspace/plans-and-billing/" description="Choose and change a plan." />
+  <LinkCard title="Roles and permissions" href="/workspace/roles-and-permissions/" description="Who can do what." />
+</CardGrid>

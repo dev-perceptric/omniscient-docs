@@ -1,0 +1,161 @@
+---
+title: "Roles and permissions"
+description: "A grid of what owners, admins and members can do in Omniscient, from records and views to settings, integrations, workflows, billing and security."
+sidebar:
+  label: "Roles and permissions"
+---
+
+import { Aside, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Every person in a workspace has one of three roles. The role decides what they can change. It doesn't decide what they can see: what a person sees from someone's email and meetings follows that mailbox's sharing setting.
+
+| Role | Who it's for | How many |
+| --- | --- | --- |
+| **Owner** | The person who made the workspace, or the one it was handed to | One per workspace |
+| **Admin** | People who set up the workspace and manage the team | Any number |
+| **Member** | Everyone else | Any number |
+
+Owners and admins change roles in **Settings**, then **Members**. See [Members and roles](/workspace/members-and-roles/) for how.
+
+## The grid
+
+**Yes** means the role can do it. **Own** means only for things that person made. A dash means no.
+
+### Records and lists
+
+| What | Owner | Admin | Member |
+| --- | --- | --- | --- |
+| See companies, people and opportunities | Yes | Yes | Yes |
+| Add, edit and merge records | Yes | Yes | Yes |
+| Delete records (they go to Trash) | Yes | Yes | Yes |
+| Bulk edit and bulk delete, up to 1,000 at a time | Yes | Yes | Yes |
+| Import and export a view as CSV, Excel or JSON | Yes | Yes | Yes |
+| Restore records from Trash | Yes | Yes | Yes |
+| Delete forever from Trash | Yes | Yes | Own |
+| Save a view | Yes | Yes | Yes |
+| Change or delete a saved view | Yes | Yes | Own |
+| Add and edit pipelines and stages | Yes | Yes | Yes |
+| Add notes | Yes | Yes | Yes |
+| Edit or delete a note | Own | Own | Own |
+| Upload files to a record | Yes | Yes | Yes |
+| Delete a file | Yes | Yes | Own |
+
+### Data model
+
+| What | Owner | Admin | Member |
+| --- | --- | --- | --- |
+| See objects and fields | Yes | Yes | Yes |
+| Add, change or delete objects (up to 50) | Yes | Yes | — |
+| Add, change or delete fields and relationships | Yes | Yes | — |
+| Change which screens and record tabs an object shows | Yes | Yes | — |
+
+### Otto, Knowledge and Skills
+
+| What | Owner | Admin | Member |
+| --- | --- | --- | --- |
+| Ask Otto and keep chats | Yes | Yes | Yes |
+| Add a Knowledge document | Yes | Yes | Yes |
+| Edit or delete a shared Knowledge document | Yes | Yes | Yes |
+| Make a document personal or shared | Own | Own | Own |
+| Use system skills | Yes | Yes | Yes |
+| Add, edit or delete a Workspace skill | Yes | Yes | — |
+| Add, edit or delete a Personal skill | Own | Own | Own |
+| Find leads (uses your daily credits) | Yes | Yes | Yes |
+| Set up the CRM for your industry | Yes | Yes | — |
+
+### Workflows
+
+| What | Owner | Admin | Member |
+| --- | --- | --- | --- |
+| See workflows and their runs | Yes | Yes | Yes |
+| Make, edit, publish, pause and delete workflows | Yes | Yes | — |
+| Change a workflow with Otto | Yes | Yes | — |
+
+### Email, calendar and calls
+
+| What | Owner | Admin | Member |
+| --- | --- | --- | --- |
+| Connect your own mail and calendar | Yes | Yes | Yes |
+| Pick your mailbox's sharing and sync settings | Own | Own | Own |
+| Pick which of your calls get notes | Own | Own | Own |
+| Send email from your own mailbox | Yes | Yes | Yes |
+| Message templates in **Settings**, then **Templates** | Yes | Yes | Yes |
+
+### Integrations and developers
+
+| What | Owner | Admin | Member |
+| --- | --- | --- | --- |
+| Connect an app just for yourself | Yes | Yes | Yes |
+| Connect an app for the whole team | Yes | Yes | — |
+| Connect Slack and pick its channel | Yes | Yes | — |
+| Import from HubSpot, Salesforce, Attio or Pipedrive | Yes | Yes | — |
+| Connect Claritia, Arrowsterr or an AI app with the MCP server | Yes | Yes | — |
+| Make and revoke API keys | Yes | Yes | — |
+| Add, test and delete webhooks | Yes | Yes | — |
+| Make capture forms and webhooks, and set **Assignment** | Yes | Yes | — |
+| Set the extension's LinkedIn fields | Yes | Yes | — |
+
+### Team, workspace and billing
+
+| What | Owner | Admin | Member |
+| --- | --- | --- | --- |
+| See who's on the team | Yes | Yes | Yes |
+| Invite people and make invite links | Yes | Yes | — |
+| Remove people | Yes | Yes | — |
+| Change someone's role | Yes | Yes | — |
+| Change or remove the owner | Yes | — | — |
+| Hand the workspace to someone else | Yes | — | — |
+| Set Seller seats and Free seats | Yes | Yes | — |
+| Rename the workspace, change its logo and domain | Yes | Yes | — |
+| Edit **Brand** | Yes | Yes | — |
+| Choose a plan and manage billing | Yes | Yes | — |
+| Delete the workspace | Yes | — | — |
+| Leave the workspace | — | Yes | Yes |
+
+### Security
+
+| What | Owner | Admin | Member |
+| --- | --- | --- | --- |
+| Turn on your own two-step sign-in, passkeys and backup codes | Yes | Yes | Yes |
+| End your own sessions | Yes | Yes | Yes |
+| Ask everyone to use two-step | Yes | Yes | — |
+| Pick the ways people can sign in and how long sessions last | Yes | Yes | — |
+| Add and verify email domains | Yes | Yes | — |
+| Set up company SSO and SCIM | Yes | Yes | — |
+| Read and download the audit log | Yes | Yes | — |
+
+The owner can't leave or be removed. To leave, hand the workspace to someone else first.
+
+## Settings pages each role sees
+
+Members don't see four settings pages at all: **Sign-in**, **Brand**, **Capture** and **Imports**. Every other page shows to everyone, with the controls a member can't use left out or turned off.
+
+| Settings page | Owner | Admin | Member |
+| --- | --- | --- | --- |
+| Account, Security, Notifications, Experience | Yes | Yes | Yes |
+| General, Members, Templates, Plans & billing | Yes | Yes | Yes |
+| Sign-in, Brand | Yes | Yes | — |
+| Mail & calendar, Call notes, Chrome extension, Integrations | Yes | Yes | Yes |
+| Data model, Workflows, Trash | Yes | Yes | Yes |
+| Capture, Imports | Yes | Yes | — |
+
+## What a member sees from others' email
+
+Roles don't change this. Each mailbox's owner picks one of three settings in **Settings**, then **Mail & calendar**:
+
+| Sharing | Teammates see |
+| --- | --- |
+| **Share everything** | Subjects, previews and what Otto found, with quotes |
+| **Share who and when** | Who and when, and what Otto found without quotes. No subject or preview. |
+| **Keep private** | Nothing. What Otto finds stays with the mailbox's owner. |
+
+<Aside type="note">
+When a member tries something only owners and admins can do, Omniscient says so, for example "Only owners and admins can invite people." or "Only owners and admins can manage the API." The [error guide](/reference/error-messages/#team-and-roles) lists them all.
+</Aside>
+
+## Related
+
+<CardGrid>
+  <LinkCard title="Members and roles" href="/workspace/members-and-roles/" description="Invite people and change roles." />
+  <LinkCard title="Plan limits" href="/workspace/plan-limits/" description="Seats, credits and every limit." />
+</CardGrid>
